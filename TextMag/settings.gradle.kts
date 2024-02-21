@@ -13,5 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "TextMag"
+rootProject.name = "CameraXTest"
 include(":app")
+ 
