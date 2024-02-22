@@ -1,4 +1,4 @@
-package de.yanneckreiss.cameraxtutorial.ui.theme
+package com.example.magtest.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

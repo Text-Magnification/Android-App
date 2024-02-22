@@ -1,4 +1,4 @@
-package de.yanneckreiss.cameraxtutorial.ui.theme
+package com.example.magtest.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -38,7 +38,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun JetpackComposeCameraXTutorialTheme(
+fun MagTestTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,

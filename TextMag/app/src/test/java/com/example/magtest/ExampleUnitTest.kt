@@ -1,4 +1,4 @@
-package com.example.textmag
+package com.example.magtest
 
 import org.junit.Test
 
