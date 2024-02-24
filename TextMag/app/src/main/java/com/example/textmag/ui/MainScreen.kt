@@ -26,7 +26,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.textmag.R
 import com.example.textmag.ui.theme.TextMagTheme
 
@@ -36,6 +38,7 @@ fun MainScreen(
     onTextRecognition: (String) -> Unit,
     onFreezeButtonClick: () -> Unit,
     isTextFrozen: Boolean,
+    fontSize: String = "14",
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -46,6 +49,7 @@ fun MainScreen(
             onTextRecognition = onTextRecognition,
             onFreezeButtonClick = onFreezeButtonClick,
             isTextFrozen = isTextFrozen,
+            fontSize = fontSize,
             modifier = Modifier.padding(innerPadding)
         )
     }
@@ -56,6 +60,7 @@ fun MainScreenBody(
     onTextRecognition: (String) -> Unit,
     onFreezeButtonClick: () -> Unit,
     isTextFrozen: Boolean,
+    fontSize: String,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -103,6 +108,7 @@ fun MainScreenBody(
         ) {
             Text(
                 text = "Text goes here",
+                fontSize = fontSize.toInt().sp,
                 modifier = Modifier.padding(16.dp)
             )
 

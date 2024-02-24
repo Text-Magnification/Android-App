@@ -34,7 +34,8 @@ fun TextMagApp(
                 onSettingsButtonClick = { navController.navigate(TextMagScreen.Settings.name) },
                 onTextRecognition = { result -> viewModel.updateRecognizedText(result) },
                 onFreezeButtonClick = { viewModel.toggleFreezeState() },
-                isTextFrozen = uiState.isTextFrozen
+                isTextFrozen = uiState.isTextFrozen,
+                fontSize = uiState.fontSize.toString().slice(0..1)
             )
         }
 
