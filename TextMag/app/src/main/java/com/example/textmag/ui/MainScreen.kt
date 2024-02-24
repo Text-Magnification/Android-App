@@ -24,22 +24,40 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.textmag.R
 import com.example.textmag.ui.theme.TextMagTheme
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier) {
+fun MainScreen(
+    onSettingsButtonClick: () -> Unit,
+    onTextRecognition: (String) -> Unit,
+    onFreezeButtonClick: () -> Unit,
+    isTextFrozen: Boolean,
+    modifier: Modifier = Modifier
+) {
     Scaffold(
-        topBar = { MainScreenAppBar() },
-        modifier = Modifier.fillMaxSize()
+        topBar = { MainScreenAppBar(onSettingsButtonClick) },
+        modifier = modifier
     ) {innerPadding ->
-        MainScreenBody(modifier = Modifier.padding(innerPadding))
+        MainScreenBody(
+            onTextRecognition = onTextRecognition,
+            onFreezeButtonClick = onFreezeButtonClick,
+            isTextFrozen = isTextFrozen,
+            modifier = Modifier.padding(innerPadding)
+        )
     }
 }
 
 @Composable
-fun MainScreenBody(modifier: Modifier = Modifier) {
+fun MainScreenBody(
+    onTextRecognition: (String) -> Unit,
+    onFreezeButtonClick: () -> Unit,
+    isTextFrozen: Boolean,
+    modifier: Modifier = Modifier
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -67,9 +85,11 @@ fun MainScreenBody(modifier: Modifier = Modifier) {
                 containerColor = Color(121, 79, 130),
                 contentColor = Color.White
             ),
-            onClick = { /*TODO*/ }
+            onClick = onFreezeButtonClick
         ) {
-            Text(text = "Freeze Text")
+            Text(
+                text = if (isTextFrozen) stringResource(R.string.unfreeze_button_label) else stringResource(R.string.freeze_button_label)
+            )
         }
 
         Spacer(modifier = Modifier.padding(16.dp))
@@ -92,14 +112,14 @@ fun MainScreenBody(modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreenAppBar() {
+fun MainScreenAppBar(onClick: () -> Unit) {
     // TODO: Add navigation to the next screen in the IconButton onClick
     // TODO: Remove hardcoding of colors to accommodate themes
     CenterAlignedTopAppBar(
         title = {
-            Text(text = "Text Magnifier")
+            Text(text = stringResource(R.string.app_name))
         },
-        actions = { IconButton(onClick = { /*TODO*/ }) {
+        actions = { IconButton(onClick = onClick) {
             Icon(
                 Icons.Filled.Settings,
                 contentDescription = "Settings",
@@ -117,6 +137,12 @@ fun MainScreenAppBar() {
 @Composable
 fun MainScreenPreview() {
     TextMagTheme {
-        MainScreen()
+        MainScreen(
+            onSettingsButtonClick = {},
+            onTextRecognition = { res: String -> },
+            onFreezeButtonClick = {},
+            isTextFrozen = false,
+            modifier = Modifier.fillMaxSize()
+        )
     }
 }

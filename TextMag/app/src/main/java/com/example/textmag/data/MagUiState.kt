@@ -8,4 +8,6 @@ data class MagUiState(
     val fontSize: Dp = 16.dp,
     val theme: String = "System",
     val arEnabled: Boolean = false,
+    val recognizedText: String = "",
+    val isTextFrozen: Boolean = false
 )
