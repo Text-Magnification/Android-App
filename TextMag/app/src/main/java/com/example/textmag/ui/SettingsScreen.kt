@@ -252,13 +252,3 @@ fun SettingsDropdown(
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun SettingsScreenPreview() {
-    TextMagTheme {
-        SettingsScreen(
-            modifier = Modifier.fillMaxSize()
-        )
-    }
-}
