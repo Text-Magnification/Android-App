@@ -37,23 +37,56 @@ import androidx.compose.ui.unit.dp
 import com.example.textmag.ui.theme.TextMagTheme
 
 @Composable
-fun SettingsScreen(modifier: Modifier = Modifier) {
+fun SettingsScreen(
+    onBackButtonClick: () -> Unit,
+    curFont: String,
+    fontOptions: List<String>,
+    onFontDropdownSelection: (String) -> Unit,
+    curFontSize: String,
+    fontSizeOptions: List<String>,
+    onFontSizeDropdownSelection: (String) -> Unit,
+    curTheme: String,
+    themeOptions: List<String>,
+    onThemeDropdownSelection: (String) -> Unit,
+    arEnabled: Boolean,
+    onArToggle: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Scaffold(
-        topBar = { SettingsScreenAppBar() },
-        modifier = Modifier.fillMaxSize()
+        topBar = { SettingsScreenAppBar(onClick = onBackButtonClick) },
+        modifier = modifier
     ) {innerPadding ->
-        SettingsScreenBody(modifier = Modifier.padding(innerPadding))
+        SettingsScreenBody(
+            curFont,
+            fontOptions,
+            onFontDropdownSelection,
+            curFontSize,
+            fontSizeOptions,
+            onFontSizeDropdownSelection,
+            curTheme,
+            themeOptions,
+            onThemeDropdownSelection,
+            arEnabled,
+            onArToggle,
+            modifier = Modifier.padding(innerPadding))
     }
 }
 
 @Composable
-fun SettingsScreenBody(modifier: Modifier = Modifier) {
-    // TODO: Abstract this out to ViewModel
-    var fontOptions = listOf("Roboto", "Helvetica", "Verdana")
-    var fontSizeOptions = listOf("16", "20", "24", "28", "32")
-    var themeOptions = listOf("System", "Light", "Dark")
-    var arEnabled by remember { mutableStateOf(false) }
-
+fun SettingsScreenBody(
+    curFont: String,
+    fontOptions: List<String>,
+    onFontDropdownSelection: (String) -> Unit,
+    curFontSize: String,
+    fontSizeOptions: List<String>,
+    onFontSizeDropdownSelection: (String) -> Unit,
+    curTheme: String,
+    themeOptions: List<String>,
+    onThemeDropdownSelection: (String) -> Unit,
+    arEnabled: Boolean,
+    onArToggle: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -71,8 +104,10 @@ fun SettingsScreenBody(modifier: Modifier = Modifier) {
                 headlineContent = { Text(text = "Font") },
                 trailingContent = {
                     SettingsDropdown(
-                        fontOptions,
-                        Modifier
+                        options = fontOptions,
+                        selection = curFont,
+                        updateSelection = onFontDropdownSelection,
+                        modifier = Modifier
                             .fillMaxWidth(fraction = 0.4f)
                             .fillMaxHeight(fraction = 0.5f)
                     )
@@ -85,8 +120,10 @@ fun SettingsScreenBody(modifier: Modifier = Modifier) {
                 headlineContent = { Text(text = "Font Size") },
                 trailingContent = {
                     SettingsDropdown(
-                        fontSizeOptions,
-                        Modifier
+                        options = fontSizeOptions,
+                        selection = curFontSize,
+                        updateSelection = onFontSizeDropdownSelection,
+                        modifier = Modifier
                             .fillMaxWidth(fraction = 0.3f)
                             .fillMaxHeight(fraction = 0.5f)
                     )
@@ -107,11 +144,13 @@ fun SettingsScreenBody(modifier: Modifier = Modifier) {
                 headlineContent = { Text(text = "Theme") },
                 trailingContent = {
                     SettingsDropdown(
-                        themeOptions,
-                        Modifier
+                        options = themeOptions,
+                        selection = curTheme,
+                        updateSelection = onThemeDropdownSelection,
+                        enabled = false,
+                        modifier = Modifier
                             .fillMaxWidth(fraction = 0.4f)
-                            .fillMaxHeight(fraction = 0.5f),
-                        enabled = false
+                            .fillMaxHeight(fraction = 0.5f)
                     )
                 }
             )
@@ -123,7 +162,7 @@ fun SettingsScreenBody(modifier: Modifier = Modifier) {
                 trailingContent = {
                     Switch(
                         checked = arEnabled,
-                        onCheckedChange = { arEnabled = it },
+                        onCheckedChange = onArToggle,
                         enabled = false
                     )
                 }
@@ -148,14 +187,15 @@ fun SettingsScreenBody(modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreenAppBar() {
-    // TODO: Add navigation to the next screen in the IconButton onClick
+fun SettingsScreenAppBar(
+    onClick: () -> Unit
+) {
     // TODO: Remove hardcoding of colors to accommodate themes
     CenterAlignedTopAppBar(
         title = {
             Text(text = "Settings")
         },
-        navigationIcon = { IconButton(onClick = { /*TODO*/ }) {
+        navigationIcon = { IconButton(onClick = onClick) {
             Icon(
                 Icons.Filled.ArrowBack,
                 contentDescription = "Settings",
@@ -171,9 +211,14 @@ fun SettingsScreenAppBar() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsDropdown(options: List<String>, modifier: Modifier = Modifier, enabled: Boolean = true) {
+fun SettingsDropdown(
+    options: List<String>,
+    selection: String,
+    updateSelection: (String) -> Unit,
+    enabled: Boolean = true,
+    modifier: Modifier = Modifier
+) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedOptionText by remember { mutableStateOf(options[0]) }
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = it },
@@ -183,7 +228,7 @@ fun SettingsDropdown(options: List<String>, modifier: Modifier = Modifier, enabl
             // The `menuAnchor` modifier must be passed to the text field for correctness.
             modifier = Modifier.menuAnchor(),
             readOnly = true,
-            value = selectedOptionText,
+            value = selection,
             onValueChange = {},
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
@@ -198,7 +243,7 @@ fun SettingsDropdown(options: List<String>, modifier: Modifier = Modifier, enabl
                 DropdownMenuItem(
                     text = { Text(selectionOption) },
                     onClick = {
-                        selectedOptionText = selectionOption
+                        updateSelection(selectionOption)
                         expanded = false
                     },
                     contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
@@ -212,6 +257,8 @@ fun SettingsDropdown(options: List<String>, modifier: Modifier = Modifier, enabl
 @Composable
 fun SettingsScreenPreview() {
     TextMagTheme {
-        SettingsScreen()
+        SettingsScreen(
+            modifier = Modifier.fillMaxSize()
+        )
     }
 }

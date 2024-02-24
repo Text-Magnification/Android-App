@@ -12,6 +12,12 @@ class MagViewModel: ViewModel() {
     private val _uiState = MutableStateFlow(MagUiState())
     val uiState: StateFlow<MagUiState> = _uiState.asStateFlow()
 
+    fun setFont(font: String) {
+        _uiState.update { currentState ->
+            currentState.copy(font = font)
+        }
+    }
+
     fun setFontSize(fontSize: String) {
         _uiState.update { currentState ->
             currentState.copy(fontSize = fontSize.toInt().dp)
@@ -26,9 +32,21 @@ class MagViewModel: ViewModel() {
         }
     }
 
+    fun updateTheme(curTheme: String) {
+        _uiState.update { currentState ->
+            currentState.copy(theme = curTheme)
+        }
+    }
+
     fun toggleFreezeState() {
         _uiState.update { currentState ->
             currentState.copy(isTextFrozen = !uiState.value.isTextFrozen)
+        }
+    }
+
+    fun updateArEnabled(status: Boolean) {
+        _uiState.update { currentState ->
+            currentState.copy(arEnabled = status)
         }
     }
 

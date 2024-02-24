@@ -5,8 +5,11 @@ import androidx.compose.ui.unit.dp
 
 data class MagUiState(
     val font: String = "Roboto",
-    val fontSize: Dp = 16.dp,
+    val fontOptions: List<String> = listOf("Roboto", "Helvetica", "Verdana"),
+    val fontSize: Dp = 14.dp,
+    val fontSizeOptions: List<String> = listOf("14", "16", "18", "20", "24", "28", "32"),
     val theme: String = "System",
+    val themeOptions: List<String> = listOf("System", "Light", "Dark"),
     val arEnabled: Boolean = false,
     val recognizedText: String = "",
     val isTextFrozen: Boolean = false
