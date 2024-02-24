@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "TextMag"
+rootProject.name = "TestLayout"
 include(":app")
