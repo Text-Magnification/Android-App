@@ -1,8 +1,8 @@
 package com.example.textmag.ui
 
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -25,15 +25,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.textmag.R
-import com.example.textmag.ui.theme.TextMagTheme
+import com.example.textmag.ui.components.CameraPreview
+import com.google.common.util.concurrent.ListenableFuture
 
 @Composable
 fun MainScreen(
+    cameraProviderFuture: ListenableFuture<ProcessCameraProvider>,
     onSettingsButtonClick: () -> Unit,
     onTextRecognition: (String) -> Unit,
     onFreezeButtonClick: () -> Unit,
@@ -46,6 +46,7 @@ fun MainScreen(
         modifier = modifier
     ) {innerPadding ->
         MainScreenBody(
+            cameraProviderFuture = cameraProviderFuture,
             onTextRecognition = onTextRecognition,
             onFreezeButtonClick = onFreezeButtonClick,
             isTextFrozen = isTextFrozen,
@@ -57,6 +58,7 @@ fun MainScreen(
 
 @Composable
 fun MainScreenBody(
+    cameraProviderFuture: ListenableFuture<ProcessCameraProvider>,
     onTextRecognition: (String) -> Unit,
     onFreezeButtonClick: () -> Unit,
     isTextFrozen: Boolean,
@@ -76,11 +78,11 @@ fun MainScreenBody(
             modifier = Modifier
                 .size(width = 300.dp, height = 300.dp)
         ) {
-            Text(
-                text = "Camera goes here",
-                modifier = Modifier.padding(16.dp)
-            )
-
+//            Text(
+//                text = "Camera goes here",
+//                modifier = Modifier.padding(16.dp)
+//            )
+            CameraPreview(cameraProviderFuture = cameraProviderFuture)
         }
 
         Spacer(modifier = Modifier.padding(16.dp))
@@ -139,16 +141,17 @@ fun MainScreenAppBar(onClick: () -> Unit) {
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun MainScreenPreview() {
-    TextMagTheme {
-        MainScreen(
-            onSettingsButtonClick = {},
-            onTextRecognition = { res: String -> },
-            onFreezeButtonClick = {},
-            isTextFrozen = false,
-            modifier = Modifier.fillMaxSize()
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun MainScreenPreview() {
+//    TextMagTheme {
+//        MainScreen(
+//            cameraProviderFuture = ListenableFuture<ProcessCameraProvider>(),
+//            onSettingsButtonClick = {},
+//            onTextRecognition = { res: String -> },
+//            onFreezeButtonClick = {},
+//            isTextFrozen = false,
+//            modifier = Modifier.fillMaxSize()
+//        )
+//    }
+//}

@@ -50,6 +50,14 @@ android {
 }
 
 dependencies {
+    val camerax_version = "1.2.2"
+    implementation("androidx.camera:camera-core:${camerax_version}")
+    implementation("androidx.camera:camera-camera2:${camerax_version}")
+    implementation("androidx.camera:camera-lifecycle:${camerax_version}")
+    implementation("androidx.camera:camera-video:${camerax_version}")
+    implementation("androidx.camera:camera-view:${camerax_version}")
+    implementation("androidx.camera:camera-extensions:${camerax_version}")
+
     implementation(platform("androidx.compose:compose-bom:2023.10.01"))
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.runtime:runtime")
