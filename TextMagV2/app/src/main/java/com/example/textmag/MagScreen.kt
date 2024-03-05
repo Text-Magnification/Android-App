@@ -1,17 +1,18 @@
 package com.example.textmag
 
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.navigation.compose.rememberNavController
 import com.example.textmag.ui.MagViewModel
 import com.example.textmag.ui.MainScreen
 import com.example.textmag.ui.SettingsScreen
+import com.google.common.util.concurrent.ListenableFuture
 
 enum class TextMagScreen() {
     Main,
@@ -20,6 +21,7 @@ enum class TextMagScreen() {
 
 @Composable
 fun TextMagApp(
+    cameraProviderFuture: ListenableFuture<ProcessCameraProvider>,
     viewModel: MagViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
@@ -31,6 +33,7 @@ fun TextMagApp(
     ) {
         composable(route = TextMagScreen.Main.name) {
             MainScreen(
+                cameraProviderFuture = cameraProviderFuture,
                 onSettingsButtonClick = { navController.navigate(TextMagScreen.Settings.name) },
                 onTextRecognition = { result -> viewModel.updateRecognizedText(result) },
                 onFreezeButtonClick = { viewModel.toggleFreezeState() },
