@@ -13,6 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "CameraXTest"
+rootProject.name = "TestLayout"
 include(":app")
- 
