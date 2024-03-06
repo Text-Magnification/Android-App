@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.textmag.R
 import com.example.textmag.ui.components.CameraPreview
-import com.google.common.util.concurrent.ListenableFuture
 
 @Composable
 fun MainScreen(
@@ -39,6 +38,7 @@ fun MainScreen(
     onFreezeButtonClick: () -> Unit,
     isTextFrozen: Boolean,
     fontSize: String = "14",
+    recognizedText: String = "",
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -51,6 +51,7 @@ fun MainScreen(
             onFreezeButtonClick = onFreezeButtonClick,
             isTextFrozen = isTextFrozen,
             fontSize = fontSize,
+            recognizedText = recognizedText,
             modifier = Modifier.padding(innerPadding)
         )
     }
@@ -63,6 +64,7 @@ fun MainScreenBody(
     onFreezeButtonClick: () -> Unit,
     isTextFrozen: Boolean,
     fontSize: String,
+    recognizedText: String = "",
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -112,7 +114,7 @@ fun MainScreenBody(
                 .size(width = 300.dp, height = 300.dp)
         ) {
             Text(
-                text = "Text goes here",
+                text = recognizedText,
                 fontSize = fontSize.toInt().sp,
                 modifier = Modifier.padding(16.dp)
             )

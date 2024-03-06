@@ -37,6 +37,7 @@ fun TextMagApp(
                 onTextRecognition = { result -> viewModel.updateRecognizedText(result) },
                 onFreezeButtonClick = { viewModel.toggleFreezeState() },
                 isTextFrozen = uiState.isTextFrozen,
+                recognizedText = uiState.recognizedText,
                 fontSize = uiState.fontSize.toString().slice(0..1)
             )
         }
