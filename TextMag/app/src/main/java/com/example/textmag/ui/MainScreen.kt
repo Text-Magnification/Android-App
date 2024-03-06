@@ -1,6 +1,6 @@
 package com.example.textmag.ui
 
-import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.LifecycleCameraController
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,7 +33,7 @@ import com.google.common.util.concurrent.ListenableFuture
 
 @Composable
 fun MainScreen(
-    cameraProviderFuture: ListenableFuture<ProcessCameraProvider>,
+    cameraProvider: LifecycleCameraController,
     onSettingsButtonClick: () -> Unit,
     onTextRecognition: (String) -> Unit,
     onFreezeButtonClick: () -> Unit,
@@ -46,7 +46,7 @@ fun MainScreen(
         modifier = modifier
     ) {innerPadding ->
         MainScreenBody(
-            cameraProviderFuture = cameraProviderFuture,
+            cameraProvider = cameraProvider,
             onTextRecognition = onTextRecognition,
             onFreezeButtonClick = onFreezeButtonClick,
             isTextFrozen = isTextFrozen,
@@ -58,7 +58,7 @@ fun MainScreen(
 
 @Composable
 fun MainScreenBody(
-    cameraProviderFuture: ListenableFuture<ProcessCameraProvider>,
+    cameraProvider: LifecycleCameraController,
     onTextRecognition: (String) -> Unit,
     onFreezeButtonClick: () -> Unit,
     isTextFrozen: Boolean,
@@ -82,7 +82,10 @@ fun MainScreenBody(
 //                text = "Camera goes here",
 //                modifier = Modifier.padding(16.dp)
 //            )
-            CameraPreview(cameraProviderFuture = cameraProviderFuture)
+            CameraPreview(
+                cameraProvider = cameraProvider,
+                onTextRecognition = onTextRecognition
+            )
         }
 
         Spacer(modifier = Modifier.padding(16.dp))
