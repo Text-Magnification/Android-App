@@ -18,6 +18,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -81,10 +82,6 @@ fun MainScreenBody(
             modifier = Modifier
                 .size(width = 300.dp, height = 300.dp)
         ) {
-//            Text(
-//                text = "Camera goes here",
-//                modifier = Modifier.padding(16.dp)
-//            )
             CameraPreview(
                 cameraProvider = cameraProvider,
                 onTextRecognition = onTextRecognition
@@ -95,8 +92,8 @@ fun MainScreenBody(
 
         Button(
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(121, 79, 130),
-                contentColor = Color.White
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ),
             onClick = onFreezeButtonClick
         ) {
@@ -109,7 +106,7 @@ fun MainScreenBody(
 
         ElevatedCard(
             colors = CardDefaults.cardColors(
-                containerColor = Color(234, 224, 231)
+                containerColor = MaterialTheme.colorScheme.background
             ),
             modifier = Modifier
                 .size(width = 300.dp, height = 300.dp)
@@ -119,7 +116,8 @@ fun MainScreenBody(
                     Text(
                         text = recognizedText,
                         fontSize = fontSize.toInt().sp,
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier.padding(16.dp),
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }
@@ -140,12 +138,12 @@ fun MainScreenAppBar(onClick: () -> Unit) {
             Icon(
                 Icons.Filled.Settings,
                 contentDescription = "Settings",
-                tint = Color.White
+                tint = MaterialTheme.colorScheme.onPrimary
             )
         }},
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color(121, 79, 130),
-            titleContentColor = Color.White
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary
         )
     )
 }

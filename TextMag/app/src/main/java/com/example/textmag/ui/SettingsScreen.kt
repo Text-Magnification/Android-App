@@ -2,7 +2,6 @@ package com.example.textmag.ui
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,10 +16,12 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -31,10 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.textmag.ui.theme.TextMagTheme
 
 @Composable
 fun SettingsScreen(
@@ -87,100 +85,114 @@ fun SettingsScreenBody(
     onArToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-            .padding(20.dp)
-            .fillMaxWidth()
+    val settingsItemPadding = 8.dp
+    Surface(
+        color = MaterialTheme.colorScheme.surface
     ) {
-        item {
-            ListItem(
-                headlineContent = { Text(text = "Font Settings") }
-            )
-        }
-
-        item {
-            ListItem(
-                headlineContent = { Text(text = "Font") },
-                trailingContent = {
-                    SettingsDropdown(
-                        options = fontOptions,
-                        selection = curFont,
-                        updateSelection = onFontDropdownSelection,
-                        modifier = Modifier
-                            .fillMaxWidth(fraction = 0.4f)
-                            .fillMaxHeight(fraction = 0.5f)
-                    )
-                }
-            )
-        }
-
-        item {
-            ListItem(
-                headlineContent = { Text(text = "Font Size") },
-                trailingContent = {
-                    SettingsDropdown(
-                        options = fontSizeOptions,
-                        selection = curFontSize,
-                        updateSelection = onFontSizeDropdownSelection,
-                        modifier = Modifier
-                            .fillMaxWidth(fraction = 0.3f)
-                            .fillMaxHeight(fraction = 0.5f)
-                    )
-                }
-            )
-            Spacer(modifier = Modifier.padding(4.dp))
-            Divider()
-        }
-
-        item {
-            ListItem(
-                headlineContent = { Text(text = "Display Settings") }
-            )
-        }
-
-        item {
-            ListItem(
-                headlineContent = { Text(text = "Theme") },
-                trailingContent = {
-                    SettingsDropdown(
-                        options = themeOptions,
-                        selection = curTheme,
-                        updateSelection = onThemeDropdownSelection,
-                        enabled = false,
-                        modifier = Modifier
-                            .fillMaxWidth(fraction = 0.4f)
-                            .fillMaxHeight(fraction = 0.5f)
-                    )
-                }
-            )
-        }
-
-        item {
-            ListItem(
-                headlineContent = { Text(text = "Display Overlays") },
-                trailingContent = {
-                    Switch(
-                        checked = arEnabled,
-                        onCheckedChange = onArToggle,
-                        enabled = false
-                    )
-                }
-            )
-            Spacer(modifier = Modifier.padding(4.dp))
-            Divider()
-        }
-
-        item {
-            Spacer(modifier = Modifier.padding(16.dp))
-            NavigationDrawerItem(
-                label = { Text(text = "Show Tutorial") },
-                selected = true,
-                onClick = { /*TODO*/ },
-                colors = NavigationDrawerItemDefaults.colors(
-                    selectedContainerColor = Color(243, 219, 243)
+        LazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier
+                .padding(20.dp)
+                .fillMaxWidth()
+        ) {
+            item {
+                ListItem(
+                    headlineContent = { SettingsText(content = "Font Settings") }
                 )
-            )
+            }
+
+            item {
+                ListItem(
+                    headlineContent = { SettingsText(content = "Font") },
+                    trailingContent = {
+                        SettingsDropdown(
+                            options = fontOptions,
+                            selection = curFont,
+                            updateSelection = onFontDropdownSelection,
+                            modifier = Modifier
+                                .fillMaxWidth(fraction = 0.4f)
+                                .fillMaxHeight(fraction = 0.5f)
+                        )
+                    },
+                    modifier = Modifier.padding(start = settingsItemPadding)
+                )
+            }
+
+            item {
+                ListItem(
+                    headlineContent = { SettingsText(content = "Font Size") },
+                    trailingContent = {
+                        SettingsDropdown(
+                            options = fontSizeOptions,
+                            selection = curFontSize,
+                            updateSelection = onFontSizeDropdownSelection,
+                            modifier = Modifier
+                                .fillMaxWidth(fraction = 0.3f)
+                                .fillMaxHeight(fraction = 0.5f)
+                        )
+                    },
+                    modifier = Modifier.padding(start = settingsItemPadding)
+                )
+                Spacer(modifier = Modifier.padding(4.dp))
+                Divider()
+            }
+
+            item {
+                ListItem(
+                    headlineContent = { SettingsText(content = "Display Settings") }
+                )
+            }
+
+            item {
+                ListItem(
+                    headlineContent = { SettingsText(content = "Theme") },
+                    trailingContent = {
+                        SettingsDropdown(
+                            options = themeOptions,
+                            selection = curTheme,
+                            updateSelection = onThemeDropdownSelection,
+                            enabled = false,
+                            modifier = Modifier
+                                .fillMaxWidth(fraction = 0.4f)
+                                .fillMaxHeight(fraction = 0.5f)
+                        )
+                    },
+                    modifier = Modifier.padding(start = settingsItemPadding)
+                )
+            }
+
+            item {
+                ListItem(
+                    headlineContent = { SettingsText(content = "Display Overlays") },
+                    trailingContent = {
+                        Switch(
+                            checked = arEnabled,
+                            onCheckedChange = onArToggle,
+                            enabled = false
+                        )
+                    },
+                    modifier = Modifier.padding(start = settingsItemPadding)
+                )
+                Spacer(modifier = Modifier.padding(4.dp))
+                Divider()
+            }
+
+            item {
+                Spacer(modifier = Modifier.padding(16.dp))
+                NavigationDrawerItem(
+                    label = {
+                        Text(
+                            text = "Show Tutorial",
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+                    },
+                    selected = true,
+                    onClick = { /*TODO*/ },
+                    colors = NavigationDrawerItemDefaults.colors(
+                        selectedContainerColor = MaterialTheme.colorScheme.secondaryContainer
+                    )
+                )
+            }
         }
     }
 }
@@ -199,13 +211,23 @@ fun SettingsScreenAppBar(
             Icon(
                 Icons.Filled.ArrowBack,
                 contentDescription = "Settings",
-                tint = Color.White
+                tint = MaterialTheme.colorScheme.onPrimary
             )
         }},
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color(121, 79, 130),
-            titleContentColor = Color.White
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary
         )
+    )
+}
+
+@Composable
+fun SettingsText(
+    content: String
+) {
+    Text(
+        text = content,
+        color = MaterialTheme.colorScheme.onSurfaceVariant
     )
 }
 
@@ -233,7 +255,7 @@ fun SettingsDropdown(
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
-            enabled = enabled
+            enabled = enabled,
         )
         ExposedDropdownMenu(
             expanded = expanded,
