@@ -1,5 +1,6 @@
 package com.example.textmag.ui
 
+import android.os.Build
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -48,6 +49,8 @@ fun SettingsScreen(
     onThemeDropdownSelection: (String) -> Unit,
     arEnabled: Boolean,
     onArToggle: (Boolean) -> Unit,
+    dynamicThemeEnabled: Boolean,
+    onDynamicThemeToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -66,6 +69,8 @@ fun SettingsScreen(
             onThemeDropdownSelection,
             arEnabled,
             onArToggle,
+            dynamicThemeEnabled,
+            onDynamicThemeToggle,
             modifier = Modifier.padding(innerPadding))
     }
 }
@@ -83,6 +88,8 @@ fun SettingsScreenBody(
     onThemeDropdownSelection: (String) -> Unit,
     arEnabled: Boolean,
     onArToggle: (Boolean) -> Unit,
+    dynamicThemeEnabled: Boolean,
+    onDynamicThemeToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val settingsItemPadding = 8.dp
@@ -151,7 +158,7 @@ fun SettingsScreenBody(
                             options = themeOptions,
                             selection = curTheme,
                             updateSelection = onThemeDropdownSelection,
-                            enabled = false,
+                            enabled = true,
                             modifier = Modifier
                                 .fillMaxWidth(fraction = 0.4f)
                                 .fillMaxHeight(fraction = 0.5f)
@@ -159,6 +166,22 @@ fun SettingsScreenBody(
                     },
                     modifier = Modifier.padding(start = settingsItemPadding)
                 )
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                item {
+                    ListItem(
+                        headlineContent = { SettingsText(content = "Dynamic Themes") },
+                        trailingContent = {
+                            Switch(
+                                checked = dynamicThemeEnabled,
+                                onCheckedChange = onDynamicThemeToggle,
+                                enabled = true
+                            )
+                        },
+                        modifier = Modifier.padding(start = settingsItemPadding)
+                    )
+                }
             }
 
             item {
