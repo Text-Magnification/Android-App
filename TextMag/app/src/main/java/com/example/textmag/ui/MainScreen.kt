@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
@@ -113,12 +114,15 @@ fun MainScreenBody(
             modifier = Modifier
                 .size(width = 300.dp, height = 300.dp)
         ) {
-            Text(
-                text = recognizedText,
-                fontSize = fontSize.toInt().sp,
-                modifier = Modifier.padding(16.dp)
-            )
-
+            LazyColumn {
+                item {
+                    Text(
+                        text = recognizedText,
+                        fontSize = fontSize.toInt().sp,
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+            }
         }
     }
 }
