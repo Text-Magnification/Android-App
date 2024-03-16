@@ -117,7 +117,8 @@ fun MainScreenBody(
                         text = recognizedText,
                         fontSize = fontSize.toInt().sp,
                         modifier = Modifier.padding(16.dp),
-                        color = MaterialTheme.colorScheme.onBackground
+                        color = MaterialTheme.colorScheme.onBackground,
+                        lineHeight = (fontSize.toInt() * 1.15).sp
                     )
                 }
             }
