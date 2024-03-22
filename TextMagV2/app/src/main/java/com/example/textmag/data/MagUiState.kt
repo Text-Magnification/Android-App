@@ -9,6 +9,7 @@ data class MagUiState(
     val fontSize: Dp = 14.dp,
     val fontSizeOptions: List<String> = listOf("14", "16", "18", "20", "24", "28", "32"),
     val theme: String = "System",
+    val dynamicThemeEnabled: Boolean = false,
     val themeOptions: List<String> = listOf("System", "Light", "Dark"),
     val arEnabled: Boolean = false,
     val recognizedText: String = "",

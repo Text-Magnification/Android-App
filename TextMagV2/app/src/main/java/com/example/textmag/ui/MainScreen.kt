@@ -1,11 +1,12 @@
 package com.example.textmag.ui
 
-import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.LifecycleCameraController
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
@@ -17,6 +18,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -29,17 +31,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.textmag.R
 import com.example.textmag.ui.components.CameraPreview
-import com.google.common.util.concurrent.ListenableFuture
-import com.example.textmag.ui.components.TextRec
 
 @Composable
 fun MainScreen(
-    cameraProviderFuture: ListenableFuture<ProcessCameraProvider>,
+    cameraProvider: LifecycleCameraController,
     onSettingsButtonClick: () -> Unit,
     onTextRecognition: (String) -> Unit,
     onFreezeButtonClick: () -> Unit,
     isTextFrozen: Boolean,
     fontSize: String = "14",
+    recognizedText: String = "",
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -47,11 +48,12 @@ fun MainScreen(
         modifier = modifier
     ) {innerPadding ->
         MainScreenBody(
-            cameraProviderFuture = cameraProviderFuture,
+            cameraProvider = cameraProvider,
             onTextRecognition = onTextRecognition,
             onFreezeButtonClick = onFreezeButtonClick,
             isTextFrozen = isTextFrozen,
             fontSize = fontSize,
+            recognizedText = recognizedText,
             modifier = Modifier.padding(innerPadding)
         )
     }
@@ -59,11 +61,12 @@ fun MainScreen(
 
 @Composable
 fun MainScreenBody(
-    cameraProviderFuture: ListenableFuture<ProcessCameraProvider>,
+    cameraProvider: LifecycleCameraController,
     onTextRecognition: (String) -> Unit,
     onFreezeButtonClick: () -> Unit,
     isTextFrozen: Boolean,
     fontSize: String,
+    recognizedText: String = "",
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -79,21 +82,18 @@ fun MainScreenBody(
             modifier = Modifier
                 .size(width = 300.dp, height = 300.dp)
         ) {
-//            Text(
-//                text = "Camera goes here",
-//                modifier = Modifier.padding(16.dp)
-//            )
-            CameraPreview(cameraProviderFuture = cameraProviderFuture)
+            CameraPreview(
+                cameraProvider = cameraProvider,
+                onTextRecognition = onTextRecognition
+            )
         }
-
-        TextRec().startCamera(cameraProviderFuture, onTextRecognition)
 
         Spacer(modifier = Modifier.padding(16.dp))
 
         Button(
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(121, 79, 130),
-                contentColor = Color.White
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ),
             onClick = onFreezeButtonClick
         ) {
@@ -106,17 +106,22 @@ fun MainScreenBody(
 
         ElevatedCard(
             colors = CardDefaults.cardColors(
-                containerColor = Color(234, 224, 231)
+                containerColor = MaterialTheme.colorScheme.background
             ),
             modifier = Modifier
                 .size(width = 300.dp, height = 300.dp)
         ) {
-            Text(
-                text = "Text goes here",
-                fontSize = fontSize.toInt().sp,
-                modifier = Modifier.padding(16.dp)
-            )
-
+            LazyColumn {
+                item {
+                    Text(
+                        text = recognizedText,
+                        fontSize = fontSize.toInt().sp,
+                        modifier = Modifier.padding(16.dp),
+                        color = MaterialTheme.colorScheme.onBackground,
+                        lineHeight = (fontSize.toInt() * 1.15).sp
+                    )
+                }
+            }
         }
     }
 }
@@ -134,15 +139,16 @@ fun MainScreenAppBar(onClick: () -> Unit) {
             Icon(
                 Icons.Filled.Settings,
                 contentDescription = "Settings",
-                tint = Color.White
+                tint = MaterialTheme.colorScheme.onPrimary
             )
         }},
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color(121, 79, 130),
-            titleContentColor = Color.White
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary
         )
     )
 }
+
 
 //@Preview(showBackground = true)
 //@Composable

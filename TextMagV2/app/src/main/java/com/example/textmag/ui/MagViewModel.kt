@@ -50,5 +50,11 @@ class MagViewModel: ViewModel() {
         }
     }
 
+    fun updateDynamicThemeEnabled(status: Boolean) {
+        _uiState.update { currentState ->
+            currentState.copy(dynamicThemeEnabled = status)
+        }
+    }
+
     // TODO: Add a reset to default options in settings
 }

@@ -1,6 +1,7 @@
 package com.example.textmag
 
-import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.LifecycleCameraController
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -12,7 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.textmag.ui.MagViewModel
 import com.example.textmag.ui.MainScreen
 import com.example.textmag.ui.SettingsScreen
-import com.google.common.util.concurrent.ListenableFuture
+import com.example.textmag.ui.theme.TextMagTheme
 
 enum class TextMagScreen() {
     Main,
@@ -21,42 +22,58 @@ enum class TextMagScreen() {
 
 @Composable
 fun TextMagApp(
-    cameraProviderFuture: ListenableFuture<ProcessCameraProvider>,
+    cameraProvider: LifecycleCameraController,
     viewModel: MagViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val currentTheme = uiState.theme
+    var darkTheme: Boolean
 
-    NavHost(
-        navController = navController,
-        startDestination =  TextMagScreen.Main.name
+    when (currentTheme) {
+        "System" -> darkTheme = isSystemInDarkTheme()
+        "Dark" -> darkTheme = true
+        else -> darkTheme = false
+    }
+
+    TextMagTheme(
+        darkTheme = darkTheme,
+        dynamicColor = uiState.dynamicThemeEnabled
     ) {
-        composable(route = TextMagScreen.Main.name) {
-            MainScreen(
-                cameraProviderFuture = cameraProviderFuture,
-                onSettingsButtonClick = { navController.navigate(TextMagScreen.Settings.name) },
-                onTextRecognition = { result -> viewModel.updateRecognizedText(result) },
-                onFreezeButtonClick = { viewModel.toggleFreezeState() },
-                isTextFrozen = uiState.isTextFrozen,
-                fontSize = uiState.fontSize.toString().slice(0..1)
-            )
-        }
+        NavHost(
+            navController = navController,
+            startDestination =  TextMagScreen.Main.name
+        ) {
+            composable(route = TextMagScreen.Main.name) {
+                MainScreen(
+                    cameraProvider = cameraProvider,
+                    onSettingsButtonClick = { navController.navigate(TextMagScreen.Settings.name) },
+                    onTextRecognition = { result -> viewModel.updateRecognizedText(result) },
+                    onFreezeButtonClick = { viewModel.toggleFreezeState() },
+                    isTextFrozen = uiState.isTextFrozen,
+                    recognizedText = uiState.recognizedText,
+                    fontSize = uiState.fontSize.toString().slice(0..1)
+                )
+            }
 
-        composable(route = TextMagScreen.Settings.name) {
-            SettingsScreen(
-                onBackButtonClick = { navController.navigate(TextMagScreen.Main.name) },
-                curFont = uiState.font,
-                fontOptions = uiState.fontOptions,
-                onFontDropdownSelection = { newFont -> viewModel.setFont(newFont) },
-                curFontSize = uiState.fontSize.toString().slice(0..1),
-                fontSizeOptions = uiState.fontSizeOptions,
-                onFontSizeDropdownSelection = { newFontSize -> viewModel.setFontSize(newFontSize)},
-                curTheme = uiState.theme,
-                themeOptions = uiState.themeOptions,
-                onThemeDropdownSelection = { newTheme -> viewModel.updateTheme(newTheme) },
-                arEnabled = uiState.arEnabled,
-                onArToggle = { status -> viewModel.updateArEnabled(status) }
-            )
+            composable(route = TextMagScreen.Settings.name) {
+                SettingsScreen(
+                    onBackButtonClick = { navController.navigate(TextMagScreen.Main.name) },
+                    curFont = uiState.font,
+                    fontOptions = uiState.fontOptions,
+                    onFontDropdownSelection = { newFont -> viewModel.setFont(newFont) },
+                    curFontSize = uiState.fontSize.toString().slice(0..1),
+                    fontSizeOptions = uiState.fontSizeOptions,
+                    onFontSizeDropdownSelection = { newFontSize -> viewModel.setFontSize(newFontSize)},
+                    curTheme = uiState.theme,
+                    themeOptions = uiState.themeOptions,
+                    onThemeDropdownSelection = { newTheme -> viewModel.updateTheme(newTheme) },
+                    arEnabled = uiState.arEnabled,
+                    onArToggle = { status -> viewModel.updateArEnabled(status) },
+                    dynamicThemeEnabled = uiState.dynamicThemeEnabled,
+                    onDynamicThemeToggle = { status -> viewModel.updateDynamicThemeEnabled(status)}
+                )
+            }
         }
     }
 }

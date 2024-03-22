@@ -38,7 +38,6 @@ android {
     }
     buildFeatures {
         compose = true
-        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -51,13 +50,9 @@ android {
 }
 
 dependencies {
-    val camerax_version = "1.2.2"
-    implementation("androidx.camera:camera-mlkit-vision:1.4.0-alpha04")
     implementation("com.google.mlkit:text-recognition:16.0.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-
+    implementation("androidx.camera:camera-mlkit-vision:1.4.0-alpha04")
+    val camerax_version = "1.2.2"
     implementation("androidx.camera:camera-core:${camerax_version}")
     implementation("androidx.camera:camera-camera2:${camerax_version}")
     implementation("androidx.camera:camera-lifecycle:${camerax_version}")
