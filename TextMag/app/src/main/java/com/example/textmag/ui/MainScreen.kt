@@ -46,7 +46,7 @@ fun MainScreen(
     Scaffold(
         topBar = { MainScreenAppBar(onSettingsButtonClick) },
         modifier = modifier
-    ) {innerPadding ->
+    ) { innerPadding ->
         MainScreenBody(
             cameraProvider = cameraProvider,
             onTextRecognition = onTextRecognition,
@@ -75,18 +75,11 @@ fun MainScreenBody(
             .padding(20.dp)
             .fillMaxWidth()
     ) {
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = Color(234, 224, 231)
-            ),
-            modifier = Modifier
-                .size(width = 300.dp, height = 300.dp)
-        ) {
-            CameraPreview(
-                cameraProvider = cameraProvider,
-                onTextRecognition = onTextRecognition
-            )
-        }
+        // Display camera preview with text recognition
+        CameraPreview(
+            cameraProvider = cameraProvider,
+            onTextRecognition = onTextRecognition
+        )
 
         Spacer(modifier = Modifier.padding(16.dp))
 
