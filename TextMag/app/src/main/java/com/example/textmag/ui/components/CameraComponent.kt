@@ -1,3 +1,5 @@
+package com.example.textmag.ui.components
+
 import android.content.Context
 import android.graphics.*
 import android.media.Image
