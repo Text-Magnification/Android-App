@@ -36,9 +36,12 @@ fun TextMagApp(
         else -> darkTheme = false
     }
 
+    val typography = viewModel.getTypography()
+
     TextMagTheme(
         darkTheme = darkTheme,
-        dynamicColor = uiState.dynamicThemeEnabled
+        dynamicColor = uiState.dynamicThemeEnabled,
+        typography = typography
     ) {
         NavHost(
             navController = navController,

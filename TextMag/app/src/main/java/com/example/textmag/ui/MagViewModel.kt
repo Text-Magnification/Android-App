@@ -1,8 +1,11 @@
 package com.example.textmag.ui
 
+import androidx.compose.material3.Typography
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import com.example.textmag.data.MagUiState
+import com.example.textmag.ui.theme.dyslexicTypography
+import com.example.textmag.ui.theme.robotoTypography
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,6 +19,13 @@ class MagViewModel: ViewModel() {
         _uiState.update { currentState ->
             currentState.copy(font = font)
         }
+    }
+
+    fun getTypography() : Typography {
+        when(uiState.value.font) {
+            "Roboto" -> return robotoTypography
+        }
+        return dyslexicTypography
     }
 
     fun setFontSize(fontSize: String) {
