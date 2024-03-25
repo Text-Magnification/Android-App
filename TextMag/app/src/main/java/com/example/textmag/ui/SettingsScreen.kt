@@ -1,10 +1,12 @@
 package com.example.textmag.ui
 
 import android.os.Build
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -134,8 +136,7 @@ fun SettingsScreenBody(
                             selection = curFontSize,
                             updateSelection = onFontSizeDropdownSelection,
                             modifier = Modifier
-                                .fillMaxWidth(fraction = 0.3f)
-                                .fillMaxHeight(fraction = 0.5f)
+                                .fillMaxWidth(0.4f)
                         )
                     },
                     modifier = Modifier.padding(start = settingsItemPadding)
@@ -271,7 +272,9 @@ fun SettingsDropdown(
     ) {
         OutlinedTextField(
             // The `menuAnchor` modifier must be passed to the text field for correctness.
-            modifier = Modifier.menuAnchor(),
+            modifier = Modifier
+                .menuAnchor()
+                .width(IntrinsicSize.Min),
             readOnly = true,
             value = selection,
             onValueChange = {},
@@ -279,10 +282,12 @@ fun SettingsDropdown(
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
             enabled = enabled,
+            singleLine = true,
         )
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
+            modifier = Modifier.width(IntrinsicSize.Min)
         ) {
             options.forEach { selectionOption ->
                 DropdownMenuItem(
