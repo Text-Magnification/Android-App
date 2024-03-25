@@ -46,7 +46,7 @@ fun MainScreen(
     Scaffold(
         topBar = { MainScreenAppBar(onSettingsButtonClick) },
         modifier = modifier
-    ) { innerPadding ->
+    ) {innerPadding ->
         MainScreenBody(
             cameraProvider = cameraProvider,
             onTextRecognition = onTextRecognition,
@@ -75,11 +75,18 @@ fun MainScreenBody(
             .padding(20.dp)
             .fillMaxWidth()
     ) {
-        // Display camera preview with text recognition
-        CameraPreview(
-            cameraProvider = cameraProvider,
-            onTextRecognition = onTextRecognition
-        )
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = Color(234, 224, 231)
+            ),
+            modifier = Modifier
+                .size(width = 300.dp, height = 300.dp)
+        ) {
+            CameraPreview(
+                cameraProvider = cameraProvider,
+                onTextRecognition = onTextRecognition
+            )
+        }
 
         Spacer(modifier = Modifier.padding(16.dp))
 
@@ -141,19 +148,3 @@ fun MainScreenAppBar(onClick: () -> Unit) {
         )
     )
 }
-
-
-//@Preview(showBackground = true)
-//@Composable
-//fun MainScreenPreview() {
-//    TextMagTheme {
-//        MainScreen(
-//            cameraProviderFuture = ListenableFuture<ProcessCameraProvider>(),
-//            onSettingsButtonClick = {},
-//            onTextRecognition = { res: String -> },
-//            onFreezeButtonClick = {},
-//            isTextFrozen = false,
-//            modifier = Modifier.fillMaxSize()
-//        )
-//    }
-//}

@@ -9,7 +9,6 @@ import androidx.activity.compose.setContent
 import androidx.camera.view.LifecycleCameraController
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.PackageManagerCompat
 
 class MainActivity : ComponentActivity() {
 
@@ -29,9 +28,6 @@ class MainActivity : ComponentActivity() {
     private fun checkPermission(permission: String, requestCode: Int) {
         if(ContextCompat.checkSelfPermission(this@MainActivity, permission) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this@MainActivity, arrayOf(permission), requestCode)
-        }
-        else {
-            Toast.makeText(this@MainActivity, "Permission already granted.", Toast.LENGTH_SHORT).show()
         }
     }
     override fun onRequestPermissionsResult(requestCode: Int,
