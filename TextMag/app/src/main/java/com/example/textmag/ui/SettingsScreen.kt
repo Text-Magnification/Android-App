@@ -192,7 +192,6 @@ fun SettingsScreenBody(
                         Switch(
                             checked = arEnabled,
                             onCheckedChange = onArToggle,
-                            enabled = false
                         )
                     },
                     modifier = Modifier.padding(start = settingsItemPadding)

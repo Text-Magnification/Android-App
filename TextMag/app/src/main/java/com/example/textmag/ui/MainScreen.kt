@@ -38,6 +38,7 @@ fun MainScreen(
     cameraProvider: LifecycleCameraController,
     onSettingsButtonClick: () -> Unit,
     onTextRecognition: (String, List<Rect>, List<Float>) -> Unit,
+    arEnabled: Boolean,
     onFreezeButtonClick: () -> Unit,
     isTextFrozen: Boolean,
     fontSize: String = "14",
@@ -51,6 +52,7 @@ fun MainScreen(
         MainScreenBody(
             cameraProvider = cameraProvider,
             onTextRecognition = onTextRecognition,
+            arEnabled = arEnabled,
             onFreezeButtonClick = onFreezeButtonClick,
             isTextFrozen = isTextFrozen,
             fontSize = fontSize,
@@ -64,6 +66,7 @@ fun MainScreen(
 fun MainScreenBody(
     cameraProvider: LifecycleCameraController,
     onTextRecognition: (String, List<Rect>, List<Float>) -> Unit,
+    arEnabled: Boolean,
     onFreezeButtonClick: () -> Unit,
     isTextFrozen: Boolean,
     fontSize: String,
@@ -85,7 +88,8 @@ fun MainScreenBody(
         ) {
             CameraPreview(
                 cameraProvider = cameraProvider,
-                onTextRecognition = onTextRecognition
+                onTextRecognition = onTextRecognition,
+                arEnabled = arEnabled
             )
         }
 

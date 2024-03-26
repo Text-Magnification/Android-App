@@ -28,6 +28,7 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 fun bindPreview(
     onTextRecognition: (String, List<Rect>, List<Float>) -> Unit,
     cameraProvider: LifecycleCameraController,
+    arEnabled: Boolean,
     lifecycleOwner: LifecycleOwner,
     context: Context
 ): LifecycleCameraController {
@@ -40,24 +41,24 @@ fun bindPreview(
             COORDINATE_SYSTEM_VIEW_REFERENCED,
             ContextCompat.getMainExecutor(context)
         ) { result: MlKitAnalyzer.Result? ->
+            val text = result?.getValue(textRecognizer)?.text ?: ""
             val blocks = result?.getValue(textRecognizer)?.textBlocks ?: emptyList()
-            val extractedText = StringBuilder()
             val boundingBoxes = mutableListOf<Rect>()
             val angles = mutableListOf<Float>()
 
-            blocks.forEach { block ->
-                val lines = block.lines
-                lines.forEach {
-                        line ->
-                    extractedText.append(line.text).append('\n')
-                    line.boundingBox?.let {
-                        boundingBoxes.add(it)
-                        angles.add(line.angle)
+            if (arEnabled) {
+                blocks.forEach { block ->
+                    val lines = block.lines
+                    lines.forEach { line ->
+                        line.boundingBox?.let {
+                            boundingBoxes.add(it)
+                            angles.add(line.angle)
+                        }
                     }
                 }
             }
 
-            onTextRecognition(extractedText.toString(), boundingBoxes, angles)
+            onTextRecognition(text, boundingBoxes, angles)
             return@MlKitAnalyzer
         }
     )
@@ -88,9 +89,15 @@ class BoundingBoxOverlay(context : Context) : View(context) {
         }
     }
 
-    fun updateBoundingBoxes(boxes: List<Rect>, angs: List<Float>) {
-        boundingBoxes = boxes
-        angles = angs
+    fun updateBoundingBoxes(boxes: List<Rect>, angs: List<Float>, arEnabled: Boolean) {
+        if (arEnabled) {
+            boundingBoxes = boxes
+            angles = angs
+        }
+        else {
+            boundingBoxes = emptyList()
+            angles = emptyList()
+        }
         invalidate() // Redraw the view with updated bounding boxes
     }
 }
@@ -98,7 +105,8 @@ class BoundingBoxOverlay(context : Context) : View(context) {
 @Composable
 fun CameraPreview(
     cameraProvider: LifecycleCameraController,
-    onTextRecognition: (String, List<Rect>, List<Float>) -> Unit
+    onTextRecognition: (String, List<Rect>, List<Float>) -> Unit,
+    arEnabled: Boolean
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
@@ -119,10 +127,11 @@ fun CameraPreview(
                     implementationMode = PreviewView.ImplementationMode.COMPATIBLE
                     controller = bindPreview(
                         { text, boxes, angles ->
-                            boundingBoxOverlay.updateBoundingBoxes(boxes, angles)
+                            boundingBoxOverlay.updateBoundingBoxes(boxes, angles, arEnabled)
                             onTextRecognition(text, boxes, angles)
                         },
                         cameraProvider,
+                        arEnabled,
                         lifecycleOwner,
                         context
                     )
