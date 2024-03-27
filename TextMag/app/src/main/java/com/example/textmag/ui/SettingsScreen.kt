@@ -53,6 +53,7 @@ fun SettingsScreen(
     onArToggle: (Boolean) -> Unit,
     dynamicThemeEnabled: Boolean,
     onDynamicThemeToggle: (Boolean) -> Unit,
+    onAboutUsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -73,6 +74,7 @@ fun SettingsScreen(
             onArToggle,
             dynamicThemeEnabled,
             onDynamicThemeToggle,
+            onAboutUsClick,
             modifier = Modifier.padding(innerPadding))
     }
 }
@@ -92,6 +94,7 @@ fun SettingsScreenBody(
     onArToggle: (Boolean) -> Unit,
     dynamicThemeEnabled: Boolean,
     onDynamicThemeToggle: (Boolean) -> Unit,
+    onAboutUsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val settingsItemPadding = 8.dp
@@ -202,6 +205,19 @@ fun SettingsScreenBody(
 
             item {
                 Spacer(modifier = Modifier.padding(16.dp))
+                NavigationDrawerItem(
+                    label = {
+                        Text(
+                            text = "About Us",
+                        )
+                    },
+                    selected = true,
+                    onClick = onAboutUsClick,
+                    colors = NavigationDrawerItemDefaults.colors(
+                        selectedContainerColor = MaterialTheme.colorScheme.tertiaryContainer
+                    )
+                )
+                Spacer(modifier = Modifier.padding(8.dp))
                 NavigationDrawerItem(
                     label = {
                         Text(

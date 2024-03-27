@@ -134,8 +134,6 @@ fun MainScreenBody(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreenAppBar(onClick: () -> Unit) {
-    // TODO: Add navigation to the next screen in the IconButton onClick
-    // TODO: Remove hardcoding of colors to accommodate themes
     CenterAlignedTopAppBar(
         title = {
             Text(text = stringResource(R.string.app_name))
