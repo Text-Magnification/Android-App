@@ -190,7 +190,7 @@ fun SettingsScreenBody(
 
             item {
                 ListItem(
-                    headlineContent = { SettingsText(content = "Display Overlays") },
+                    headlineContent = { SettingsText(content = "Display Overlays (Experimental)") },
                     trailingContent = {
                         Switch(
                             checked = arEnabled,
