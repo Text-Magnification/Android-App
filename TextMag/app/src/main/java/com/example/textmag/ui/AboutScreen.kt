@@ -2,25 +2,24 @@ package com.example.textmag.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,37 +50,51 @@ fun AboutScreenBody() {
         ) {
             item {
                 Text(
-                    text = "Four Students from the University of Michigan attempt to fight Presbyopia and Macular Degeneration with tools to give the visually impaired accessibility through a cross platform text recognition and magnification app.",
+                    text = "Four students from the University of Michigan attempt to fight presbyopia and myopia through a cross platform text recognition and magnification app to give the visually impaired accessibility.",
                     modifier = Modifier.padding(top = 80.dp, start = 16.dp, end = 16.dp),
                     fontSize = 20.sp,
-                    color = Color.Black,
                     textAlign = TextAlign.Center
                 )
             }
             item {
-                Text(
-                    text = "iOS Development Team",
-                    modifier = Modifier.fillMaxWidth(),
-                    fontSize = 35.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Center
-                )
-            }
-            itemsIndexed(teamiOS) { index, team ->
-                TeamRow(team = team)
+                Spacer(modifier = Modifier.padding(16.dp))
             }
             item {
                 Text(
-                    text = "Android Development Team",
+                    text = "Android Team",
                     modifier = Modifier.fillMaxWidth(),
-                    fontSize = 35.sp,
+                    fontSize = 36.sp,
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center
                 )
             }
-            itemsIndexed(teamAndroid) { index, team ->
+
+            items(teamAndroid) { team ->
                 TeamRow(team = team)
             }
+
+            item {
+                Spacer(modifier = Modifier.padding(16.dp))
+            }
+
+            item {
+                Text(
+                    text = "iOS Team",
+                    modifier = Modifier.fillMaxWidth(),
+                    fontSize = 36.sp,
+                    color = MaterialTheme.colorScheme.primary,
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            items(teamiOS) { team ->
+                TeamRow(team = team)
+            }
+
+            item {
+                Spacer(modifier = Modifier.padding(16.dp))
+            }
+
             item {
                 Text(
                     text = "Coordinator",
@@ -90,8 +104,8 @@ fun AboutScreenBody() {
                     textAlign = TextAlign.Center
                 )
             }
-            itemsIndexed(coordinator) { index, team ->
-                CoordinatorRow(team = team)
+            item {
+                CoordinatorRow(coordinator)
             }
         }
     }
@@ -99,58 +113,48 @@ fun AboutScreenBody() {
 
 @Composable
 fun TeamRow(team: Team) {
-    Row(
-        modifier = Modifier.fillMaxWidth()
+    ElevatedCard (
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
     ) {
-        Image(
-            painter = painterResource(id = team.imageId),
-            contentDescription = null,
-            modifier = Modifier
-                .clip(RoundedCornerShape(8.dp))
-                .padding(top = 16.dp)
-                .size(200.dp)
-                .aspectRatio(1f)
-        )
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.Top
+        Row(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Box(
+            Image(
+                painter = painterResource(id = team.imageId),
+                contentDescription = null,
                 modifier = Modifier
-                    .background(Color.LightGray)
-                    .border(3.dp, Color.Black, RoundedCornerShape(4.dp))
-                    .padding(5.dp)
-            ){
-                Text(
-                    text = "${team.name}\n${team.info}",
-                    fontSize = 20.sp,
-                    color = Color.Black,
-                    textAlign = TextAlign.Start
-                )
-            }
-            Text(
-                text = "${team.description}",
-                fontSize = 18.sp,
-                color = Color.Black,
-                textAlign = TextAlign.Start
+                    .padding(8.dp)
+                    .size(140.dp)
+                    .aspectRatio(1f)
             )
-            Box(modifier = Modifier.size(16.dp))
-            Box(
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top,
                 modifier = Modifier
-                    .background(MaterialTheme.colorScheme.primary)
-                    .border(3.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
-                    .padding(5.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .width(150.dp)
-                    .height(50.dp)
-                    .align(Alignment.CenterHorizontally)
-            ){
+                    .weight(1f)
+                    .padding(4.dp)
+            ) {
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        contentColor = MaterialTheme.colorScheme.onSurface,
+                    ),
+                    shape = RoundedCornerShape(16.dp),
+                    onClick = { /*TODO*/ }
+                ) {
+                    Text(
+                        text = "${team.name}",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Start,
+                    )
+                }
                 Text(
-                    text = team.name,
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.align(Alignment.Center)
+                    text = "${team.description}",
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Center
                 )
             }
         }
@@ -158,12 +162,12 @@ fun TeamRow(team: Team) {
 }
 
 @Composable
-fun CoordinatorRow(team : Team){
+fun CoordinatorRow(prof : Prof){
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
         Image(
-            painter = painterResource(id = team.imageId),
+            painter = painterResource(id = prof.imageId),
             contentDescription = null,
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))
@@ -176,15 +180,13 @@ fun CoordinatorRow(team : Team){
             verticalArrangement = Arrangement.Top
         ) {
             Text(
-                text = "${team.name}\n${team.info}",
+                text = "${prof.name}",
                 fontSize = 20.sp,
-                color = Color.Black,
                 textAlign = TextAlign.Start
             )
             Text(
-                text = "${team.description}",
+                text = "${prof.description}",
                 fontSize = 18.sp,
-                color = Color.Black,
                 textAlign = TextAlign.Start
             )
         }
@@ -193,6 +195,12 @@ fun CoordinatorRow(team : Team){
 
 data class Team(
     val name: String,
+    val description: String,
+    val imageId: Int
+)
+
+data class Prof(
+    val name: String,
     val info: String,
     val description: String,
     val imageId: Int
@@ -200,41 +208,35 @@ data class Team(
 
 val teamiOS = listOf(
     Team(
-        name = "Iskandar, Daniel",
-        info = "University of Michigan CS-LSA '25",
-        description = "Research/project management. Camera integration, image retrieval, and front end design in SwiftUI.",
+        name = "Daniel Iskandar",
+        description = "Camera integration, image retrieval, and front end design",
         imageId = R.drawable.daniel
     ),
     Team(
-        name = "Lu, Justin",
-        info = "University of Michigan CS-CoE '24",
-        description = "Research/project management. Apple Vision frameworks, language detection and translation, back end design in Swift UI.",
+        name = "Justin Lu",
+        description = "Text recognition, language detection and translation, and back end design",
         imageId = R.drawable.justin
     )
 )
 
 val teamAndroid = listOf(
     Team(
-        name = "Dong, Antony",
-        info = "University of Michigan CSE-CoE '24",
-        description = "CameraX Jetpack Compose implementation, front end design in Kotlin.",
+        name = "Antony Dong",
+        description = "Camera, AR integration, and front end design",
         imageId = R.drawable.antony
     ),
     Team(
-        name = "Parmar, Siddharth",
-        info = "University of Michigan CS-CoE '24",
-        description = "Android planning, research, and project management, camera integration, text translation, magnification, and app design in Kotlin",
+        name = "Siddharth Parmar",
+        description = "Camera integration, text translation, magnification, and full-stack app design",
         imageId = R.drawable.sid
     )
 )
 
-val coordinator = listOf(
-    Team(
-        name = "Dr. David R Chesney",
-        info = "Teaching Professor, Electrical Engineering and Computer Science",
-        description = "Coordinator and program director. Lead the team as an instructor in EECS 495: Software For Accessibility.",
-        imageId = R.drawable.david
-    )
+val coordinator = Prof(
+    name = "Dr. David R Chesney",
+    info = "Teaching Professor, Electrical Engineering and Computer Science",
+    description = "Coordinator and program director. Lead the team as an instructor in EECS 495: Software For Accessibility.",
+    imageId = R.drawable.david
 )
 
 
