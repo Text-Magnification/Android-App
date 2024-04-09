@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -105,7 +107,8 @@ fun AboutScreenBody() {
                 )
             }
             item {
-                CoordinatorRow(coordinator)
+                TeamRow(coordinator)
+                Spacer(modifier = Modifier.padding(16.dp))
             }
         }
     }
@@ -161,38 +164,6 @@ fun TeamRow(team: Team) {
     }
 }
 
-@Composable
-fun CoordinatorRow(prof : Prof){
-    Row(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Image(
-            painter = painterResource(id = prof.imageId),
-            contentDescription = null,
-            modifier = Modifier
-                .clip(RoundedCornerShape(8.dp))
-                .padding(top = 16.dp)
-                .size(200.dp)
-                .aspectRatio(1f)
-        )
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.Top
-        ) {
-            Text(
-                text = "${prof.name}",
-                fontSize = 20.sp,
-                textAlign = TextAlign.Start
-            )
-            Text(
-                text = "${prof.description}",
-                fontSize = 18.sp,
-                textAlign = TextAlign.Start
-            )
-        }
-    }
-}
-
 data class Team(
     val name: String,
     val description: String,
@@ -232,10 +203,9 @@ val teamAndroid = listOf(
     )
 )
 
-val coordinator = Prof(
+val coordinator = Team(
     name = "Dr. David R Chesney",
-    info = "Teaching Professor, Electrical Engineering and Computer Science",
-    description = "Coordinator and program director. Lead the team as an instructor in EECS 495: Software For Accessibility.",
+    description = "Coordinator and program director. Led the team as an instructor in EECS 495: Software For Accessibility.",
     imageId = R.drawable.david
 )
 
