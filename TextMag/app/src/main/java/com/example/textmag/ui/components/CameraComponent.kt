@@ -24,6 +24,8 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 
+var buffer = 0
+
 
 fun bindPreview(
     onTextRecognition: (String, List<Rect>, List<Float>) -> Unit,
@@ -42,6 +44,10 @@ fun bindPreview(
             ContextCompat.getMainExecutor(context)
         ) { result: MlKitAnalyzer.Result? ->
             val text = result?.getValue(textRecognizer)?.text ?: ""
+            if (text == "") {
+                buffer = 0
+                return@MlKitAnalyzer
+            }
             val blocks = result?.getValue(textRecognizer)?.textBlocks ?: emptyList()
             val boundingBoxes = mutableListOf<Rect>()
             val angles = mutableListOf<Float>()
@@ -58,7 +64,13 @@ fun bindPreview(
                 }
             }
 
-            onTextRecognition(text, boundingBoxes, angles)
+            if (buffer == 0) {
+                onTextRecognition(text, boundingBoxes, angles)
+                ++buffer
+            }
+            else {
+                buffer = (buffer + 1) % 70
+            }
             return@MlKitAnalyzer
         }
     )
