@@ -1,7 +1,9 @@
 package com.example.textmag.ui
 
 import android.os.Build
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -162,7 +164,6 @@ fun SettingsScreenBody(
             item {
                 ListItem(
                     headlineContent = { SettingsText(content = "Theme") },
-                    supportingContent = { SettingsInfo(title = "About theme", content = "Allows you to switch between themes") },
                     trailingContent = {
                         SettingsDropdown(
                             options = themeOptions,
@@ -181,8 +182,15 @@ fun SettingsScreenBody(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 item {
                     ListItem(
-                        headlineContent = { SettingsText(content = "Dynamic Themes") },
-                        supportingContent = { SettingsInfo(title = "About dynamic themes", content = "Changes the color scheme based on your system colors") },
+                        headlineContent = {
+                            Row(
+                                horizontalArrangement = Arrangement.Start,
+                                verticalAlignment = Alignment.CenterVertically
+                            ){
+                                SettingsText(content = "Dynamic Themes")
+                                SettingsInfo(title = "About dynamic themes", content = "Changes the color scheme based on your system colors")
+                            }
+                        },
                         trailingContent = {
                             Switch(
                                 checked = dynamicThemeEnabled,
@@ -197,8 +205,15 @@ fun SettingsScreenBody(
 
             item {
                 ListItem(
-                    headlineContent = { SettingsText(content = "Display Overlays (Experimental)") },
-                    supportingContent = { SettingsInfo(title = "About Overlays", content = "Displays rectangular overlays in the live camera feed around text passages (Note that this is an experimental feature)") },
+                    headlineContent = {
+                        Row(
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
+                        ){
+                            SettingsText(content = "AR Overlays (Experimental)")
+                            SettingsInfo(title = "About Overlays", content = "Displays rectangular overlays in the live camera feed around text passages (Note that this is an experimental feature)")
+                        }
+                    },
                     trailingContent = {
                         Switch(
                             checked = arEnabled,
