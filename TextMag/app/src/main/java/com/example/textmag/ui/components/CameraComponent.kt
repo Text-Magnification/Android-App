@@ -69,7 +69,7 @@ fun bindPreview(
                 ++buffer
             }
             else {
-                buffer = (buffer + 1) % 70
+                buffer = (buffer + 1) % 50
             }
             return@MlKitAnalyzer
         }

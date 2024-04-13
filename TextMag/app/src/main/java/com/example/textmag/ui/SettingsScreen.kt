@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
@@ -23,6 +24,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RichTooltipBox
+import androidx.compose.material3.RichTooltipState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -32,10 +35,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen(
@@ -157,6 +162,7 @@ fun SettingsScreenBody(
             item {
                 ListItem(
                     headlineContent = { SettingsText(content = "Theme") },
+                    supportingContent = { SettingsInfo(title = "About theme", content = "Allows you to switch between themes") },
                     trailingContent = {
                         SettingsDropdown(
                             options = themeOptions,
@@ -176,6 +182,7 @@ fun SettingsScreenBody(
                 item {
                     ListItem(
                         headlineContent = { SettingsText(content = "Dynamic Themes") },
+                        supportingContent = { SettingsInfo(title = "About dynamic themes", content = "Changes the color scheme based on your system colors") },
                         trailingContent = {
                             Switch(
                                 checked = dynamicThemeEnabled,
@@ -191,6 +198,7 @@ fun SettingsScreenBody(
             item {
                 ListItem(
                     headlineContent = { SettingsText(content = "Display Overlays (Experimental)") },
+                    supportingContent = { SettingsInfo(title = "About Overlays", content = "Displays rectangular overlays in the live camera feed around text passages (Note that this is an experimental feature)") },
                     trailingContent = {
                         Switch(
                             checked = arEnabled,
@@ -268,6 +276,28 @@ fun SettingsText(
         text = content,
         color = MaterialTheme.colorScheme.onSurfaceVariant
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SettingsInfo(
+    title: String,
+    content: String
+) {
+    val tooltipState = remember { RichTooltipState() }
+    val scope = rememberCoroutineScope()
+    RichTooltipBox(
+        title = { Text(text = title) },
+        text = { Text(text = content) },
+        tooltipState = tooltipState
+    ) {
+        IconButton(
+            onClick = { scope.launch { tooltipState.show() } },
+            modifier = Modifier.tooltipAnchor()
+        ) {
+            Icon(Icons.Outlined.Info, contentDescription = "info")
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
