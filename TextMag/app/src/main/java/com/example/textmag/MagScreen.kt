@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.textmag.ui.AboutScreen
 import com.example.textmag.ui.MagViewModel
 import com.example.textmag.ui.MainScreen
 import com.example.textmag.ui.SettingsScreen
@@ -17,7 +18,8 @@ import com.example.textmag.ui.theme.TextMagTheme
 
 enum class TextMagScreen() {
     Main,
-    Settings
+    Settings,
+    AboutUs
 }
 
 @Composable
@@ -51,7 +53,7 @@ fun TextMagApp(
                 MainScreen(
                     cameraProvider = cameraProvider,
                     onSettingsButtonClick = { navController.navigate(TextMagScreen.Settings.name) },
-                    onTextRecognition = { result, _, _ -> viewModel.updateRecognizedText(result) },
+                    onTextRecognition = { result, _ -> viewModel.updateRecognizedText(result) },
                     arEnabled = uiState.arEnabled,
                     onFreezeButtonClick = { viewModel.toggleFreezeState() },
                     isTextFrozen = uiState.isTextFrozen,
@@ -75,7 +77,14 @@ fun TextMagApp(
                     arEnabled = uiState.arEnabled,
                     onArToggle = { status -> viewModel.updateArEnabled(status) },
                     dynamicThemeEnabled = uiState.dynamicThemeEnabled,
+                    onAboutUsClick = { navController.navigate(TextMagScreen.AboutUs.name) },
                     onDynamicThemeToggle = { status -> viewModel.updateDynamicThemeEnabled(status)}
+                )
+            }
+
+            composable(route = TextMagScreen.AboutUs.name) {
+                AboutScreen(
+                    onCloseButtonClick = { navController.navigate(TextMagScreen.Settings.name) }
                 )
             }
         }

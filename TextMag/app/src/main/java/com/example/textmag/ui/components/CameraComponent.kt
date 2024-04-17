@@ -5,7 +5,8 @@ import android.graphics.Canvas
 import android.graphics.Color.argb
 import android.graphics.Color.rgb
 import android.graphics.Paint
-import android.graphics.Rect
+import android.graphics.Path
+import android.graphics.Matrix
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
@@ -24,9 +25,11 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 
+var buffer = 0
+
 
 fun bindPreview(
-    onTextRecognition: (String, List<Rect>, List<Float>) -> Unit,
+    onTextRecognition: (String, List<Path>) -> Unit,
     cameraProvider: LifecycleCameraController,
     arEnabled: Boolean,
     lifecycleOwner: LifecycleOwner,
@@ -42,23 +45,31 @@ fun bindPreview(
             ContextCompat.getMainExecutor(context)
         ) { result: MlKitAnalyzer.Result? ->
             val text = result?.getValue(textRecognizer)?.text ?: ""
+            if (text == "") {
+                buffer = 0
+                return@MlKitAnalyzer
+            }
             val blocks = result?.getValue(textRecognizer)?.textBlocks ?: emptyList()
-            val boundingBoxes = mutableListOf<Rect>()
-            val angles = mutableListOf<Float>()
+            val boundingBoxes = mutableListOf<Path>()
 
             if (arEnabled) {
                 blocks.forEach { block ->
-                    val lines = block.lines
-                    lines.forEach { line ->
-                        line.boundingBox?.let {
-                            boundingBoxes.add(it)
-                            angles.add(line.angle)
-                        }
+                    val path = Path()
+                    path.moveTo((block.cornerPoints?.get(0)?.x ?: 0).toFloat(), (block.cornerPoints?.get(0)?.y ?: 0).toFloat())
+                    for (i in 1..3) {
+                        path.lineTo((block.cornerPoints?.get(i)?.x ?: 0).toFloat(), (block.cornerPoints?.get(i)?.y ?: 0).toFloat())
                     }
+                    boundingBoxes.add(path)
                 }
             }
 
-            onTextRecognition(text, boundingBoxes, angles)
+            if (buffer == 0) {
+                onTextRecognition(text, boundingBoxes)
+                ++buffer
+            }
+            else {
+                buffer = (buffer + 1) % 50
+            }
             return@MlKitAnalyzer
         }
     )
@@ -67,8 +78,7 @@ fun bindPreview(
 }
 
 class BoundingBoxOverlay(context : Context) : View(context) {
-    private var boundingBoxes: List<Rect> = emptyList()
-    private var angles: List<Float> = emptyList()
+    private var boundingBoxes: List<Path> = emptyList()
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -78,25 +88,21 @@ class BoundingBoxOverlay(context : Context) : View(context) {
             style = Paint.Style.FILL
         }
 
-        boundingBoxes.zip(angles).forEach { pair ->
-            // Rotate canvas to orientation of line before drawing
-            // Correct skew by modifying angle
-            val angle = if (pair.second <= 90F) pair.second + 90 else pair.second - 270
-            canvas.save()
-            canvas.rotate(angle)
-            canvas.drawRect(pair.first, paint)
-            canvas.restore()
+        val rotationMatrix = Matrix()
+        rotationMatrix.setRotate(90f, canvas.width / 2f, canvas.height / 2f)
+        boundingBoxes.forEach { path ->
+            val transformedPath = Path()
+            path.transform(rotationMatrix, transformedPath)
+            canvas.drawPath(transformedPath, paint)
         }
     }
 
-    fun updateBoundingBoxes(boxes: List<Rect>, angs: List<Float>, arEnabled: Boolean) {
+    fun updateBoundingBoxes(boxes: List<Path>, arEnabled: Boolean) {
         if (arEnabled) {
             boundingBoxes = boxes
-            angles = angs
         }
         else {
             boundingBoxes = emptyList()
-            angles = emptyList()
         }
         invalidate() // Redraw the view with updated bounding boxes
     }
@@ -105,7 +111,7 @@ class BoundingBoxOverlay(context : Context) : View(context) {
 @Composable
 fun CameraPreview(
     cameraProvider: LifecycleCameraController,
-    onTextRecognition: (String, List<Rect>, List<Float>) -> Unit,
+    onTextRecognition: (String, List<Path>) -> Unit,
     arEnabled: Boolean
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -116,19 +122,19 @@ fun CameraPreview(
         factory = { context ->
             val overlayContainer = LinearLayout(context).apply {
                 layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                orientation = LinearLayout.VERTICAL
+                orientation = LinearLayout.HORIZONTAL
 
                 val previewView = PreviewView(context).apply {
                     setBackgroundColor(rgb(234, 224, 231))
-                    layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, 0).apply {
+                    layoutParams = LinearLayout.LayoutParams(0, MATCH_PARENT).apply {
                         weight = 1f // Take remaining vertical space
                     }
                     scaleType = PreviewView.ScaleType.FILL_START
                     implementationMode = PreviewView.ImplementationMode.COMPATIBLE
                     controller = bindPreview(
-                        { text, boxes, angles ->
-                            boundingBoxOverlay.updateBoundingBoxes(boxes, angles, arEnabled)
-                            onTextRecognition(text, boxes, angles)
+                        { text, boxes ->
+                            boundingBoxOverlay.updateBoundingBoxes(boxes, arEnabled)
+                            onTextRecognition(text, boxes)
                         },
                         cameraProvider,
                         arEnabled,

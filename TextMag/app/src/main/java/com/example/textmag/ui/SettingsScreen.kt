@@ -1,7 +1,9 @@
 package com.example.textmag.ui
 
 import android.os.Build
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
@@ -23,6 +26,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RichTooltipBox
+import androidx.compose.material3.RichTooltipState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -32,10 +37,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen(
@@ -53,6 +60,7 @@ fun SettingsScreen(
     onArToggle: (Boolean) -> Unit,
     dynamicThemeEnabled: Boolean,
     onDynamicThemeToggle: (Boolean) -> Unit,
+    onAboutUsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -73,6 +81,7 @@ fun SettingsScreen(
             onArToggle,
             dynamicThemeEnabled,
             onDynamicThemeToggle,
+            onAboutUsClick,
             modifier = Modifier.padding(innerPadding))
     }
 }
@@ -92,6 +101,7 @@ fun SettingsScreenBody(
     onArToggle: (Boolean) -> Unit,
     dynamicThemeEnabled: Boolean,
     onDynamicThemeToggle: (Boolean) -> Unit,
+    onAboutUsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val settingsItemPadding = 8.dp
@@ -172,7 +182,15 @@ fun SettingsScreenBody(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 item {
                     ListItem(
-                        headlineContent = { SettingsText(content = "Dynamic Themes") },
+                        headlineContent = {
+                            Row(
+                                horizontalArrangement = Arrangement.Start,
+                                verticalAlignment = Alignment.CenterVertically
+                            ){
+                                SettingsText(content = "Dynamic Themes")
+                                SettingsInfo(title = "About dynamic themes", content = "Changes the color scheme based on your system colors")
+                            }
+                        },
                         trailingContent = {
                             Switch(
                                 checked = dynamicThemeEnabled,
@@ -187,7 +205,15 @@ fun SettingsScreenBody(
 
             item {
                 ListItem(
-                    headlineContent = { SettingsText(content = "Display Overlays") },
+                    headlineContent = {
+                        Row(
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
+                        ){
+                            SettingsText(content = "AR Overlays (Experimental)")
+                            SettingsInfo(title = "About Overlays", content = "Displays rectangular overlays in the live camera feed around text passages (Note that this is an experimental feature)")
+                        }
+                    },
                     trailingContent = {
                         Switch(
                             checked = arEnabled,
@@ -202,6 +228,19 @@ fun SettingsScreenBody(
 
             item {
                 Spacer(modifier = Modifier.padding(16.dp))
+                NavigationDrawerItem(
+                    label = {
+                        Text(
+                            text = "About Us",
+                        )
+                    },
+                    selected = true,
+                    onClick = onAboutUsClick,
+                    colors = NavigationDrawerItemDefaults.colors(
+                        selectedContainerColor = MaterialTheme.colorScheme.tertiaryContainer
+                    )
+                )
+                Spacer(modifier = Modifier.padding(8.dp))
                 NavigationDrawerItem(
                     label = {
                         Text(
@@ -252,6 +291,28 @@ fun SettingsText(
         text = content,
         color = MaterialTheme.colorScheme.onSurfaceVariant
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SettingsInfo(
+    title: String,
+    content: String
+) {
+    val tooltipState = remember { RichTooltipState() }
+    val scope = rememberCoroutineScope()
+    RichTooltipBox(
+        title = { Text(text = title) },
+        text = { Text(text = content) },
+        tooltipState = tooltipState
+    ) {
+        IconButton(
+            onClick = { scope.launch { tooltipState.show() } },
+            modifier = Modifier.tooltipAnchor()
+        ) {
+            Icon(Icons.Outlined.Info, contentDescription = "info")
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
