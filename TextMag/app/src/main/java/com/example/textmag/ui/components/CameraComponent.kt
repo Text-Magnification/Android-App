@@ -7,6 +7,7 @@ import android.graphics.Color.rgb
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Matrix
+import android.graphics.RectF
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
@@ -79,6 +80,8 @@ fun bindPreview(
 
 class BoundingBoxOverlay(context : Context) : View(context) {
     private var boundingBoxes: List<Path> = emptyList()
+    private var scaleX: Float = 1.0f
+    private var scaleY: Float = 1.0f
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -89,6 +92,7 @@ class BoundingBoxOverlay(context : Context) : View(context) {
         }
 
         val rotationMatrix = Matrix()
+        rotationMatrix.setScale(scaleX, scaleY)
         rotationMatrix.setRotate(90f, canvas.width / 2f, canvas.height / 2f)
         boundingBoxes.forEach { path ->
             val transformedPath = Path()
@@ -100,6 +104,19 @@ class BoundingBoxOverlay(context : Context) : View(context) {
     fun updateBoundingBoxes(boxes: List<Path>, arEnabled: Boolean) {
         if (arEnabled) {
             boundingBoxes = boxes
+
+            val previewWidth = width.toFloat()
+            val previewHeight = height.toFloat()
+
+            val bounds = RectF()
+            boxes.forEach { path ->
+                path.computeBounds(bounds, true)
+            }
+            val originalWidth = bounds.width()
+            val originalHeight = bounds.height()
+
+            scaleX = previewWidth / originalWidth
+            scaleY = previewHeight / originalHeight
         }
         else {
             boundingBoxes = emptyList()
