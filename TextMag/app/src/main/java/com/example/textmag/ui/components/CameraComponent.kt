@@ -34,6 +34,7 @@ fun bindPreview(
     cameraProvider: LifecycleCameraController,
     arEnabled: Boolean,
     lifecycleOwner: LifecycleOwner,
+    target: Int,
     context: Context
 ): LifecycleCameraController {
     val textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
@@ -69,7 +70,7 @@ fun bindPreview(
                 ++buffer
             }
             else {
-                buffer = (buffer + 1) % 50
+                buffer = (buffer + 1) % target
             }
             return@MlKitAnalyzer
         }
@@ -129,6 +130,7 @@ class BoundingBoxOverlay(context : Context) : View(context) {
 fun CameraPreview(
     cameraProvider: LifecycleCameraController,
     onTextRecognition: (String, List<Path>) -> Unit,
+    target: Int,
     arEnabled: Boolean
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -156,6 +158,7 @@ fun CameraPreview(
                         cameraProvider,
                         arEnabled,
                         lifecycleOwner,
+                        target,
                         context
                     )
                 }

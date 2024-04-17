@@ -58,6 +58,7 @@ fun TextMagApp(
                     onFreezeButtonClick = { viewModel.toggleFreezeState() },
                     isTextFrozen = uiState.isTextFrozen,
                     recognizedText = uiState.recognizedText,
+                    stabilizationTarget = uiState.stabilizationTarget,
                     fontSize = uiState.fontSize.toString().slice(0..1)
                 )
             }
@@ -77,6 +78,8 @@ fun TextMagApp(
                     arEnabled = uiState.arEnabled,
                     onArToggle = { status -> viewModel.updateArEnabled(status) },
                     dynamicThemeEnabled = uiState.dynamicThemeEnabled,
+                    target = uiState.stabilizationTarget.toFloat(),
+                    onTargetChange = { target -> viewModel.updateStabilizationTarget(target)},
                     onAboutUsClick = { navController.navigate(TextMagScreen.AboutUs.name) },
                     onDynamicThemeToggle = { status -> viewModel.updateDynamicThemeEnabled(status)}
                 )
