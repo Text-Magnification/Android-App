@@ -53,7 +53,7 @@ fun TextMagApp(
                 MainScreen(
                     cameraProvider = cameraProvider,
                     onSettingsButtonClick = { navController.navigate(TextMagScreen.Settings.name) },
-                    onTextRecognition = { result, _, _ -> viewModel.updateRecognizedText(result) },
+                    onTextRecognition = { result, _ -> viewModel.updateRecognizedText(result) },
                     arEnabled = uiState.arEnabled,
                     onFreezeButtonClick = { viewModel.toggleFreezeState() },
                     isTextFrozen = uiState.isTextFrozen,

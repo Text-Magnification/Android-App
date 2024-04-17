@@ -1,6 +1,6 @@
 package com.example.textmag.ui
 
-import android.graphics.Rect
+import android.graphics.Path
 import androidx.camera.view.LifecycleCameraController
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -37,7 +37,7 @@ import com.example.textmag.ui.components.CameraPreview
 fun MainScreen(
     cameraProvider: LifecycleCameraController,
     onSettingsButtonClick: () -> Unit,
-    onTextRecognition: (String, List<Rect>, List<Float>) -> Unit,
+    onTextRecognition: (String, List<Path>) -> Unit,
     arEnabled: Boolean,
     onFreezeButtonClick: () -> Unit,
     isTextFrozen: Boolean,
@@ -67,7 +67,7 @@ fun MainScreen(
 @Composable
 fun MainScreenBody(
     cameraProvider: LifecycleCameraController,
-    onTextRecognition: (String, List<Rect>, List<Float>) -> Unit,
+    onTextRecognition: (String, List<Path>) -> Unit,
     arEnabled: Boolean,
     onFreezeButtonClick: () -> Unit,
     isTextFrozen: Boolean,
