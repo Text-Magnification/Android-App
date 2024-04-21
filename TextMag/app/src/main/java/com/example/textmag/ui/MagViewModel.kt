@@ -66,11 +66,5 @@ class MagViewModel: ViewModel() {
         }
     }
 
-    fun updateStabilizationTarget(target: Float) {
-        _uiState.update { currentState ->
-            currentState.copy(stabilizationTarget = target.toInt())
-        }
-    }
-
     // TODO: Add a reset to default options in settings
 }

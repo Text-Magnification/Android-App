@@ -34,7 +34,6 @@ fun bindPreview(
     cameraProvider: LifecycleCameraController,
     arEnabled: Boolean,
     lifecycleOwner: LifecycleOwner,
-    target: Int,
     context: Context
 ): LifecycleCameraController {
     val textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
@@ -70,7 +69,7 @@ fun bindPreview(
                 ++buffer
             }
             else {
-                buffer = (buffer + 1) % target
+                buffer = (buffer + 1) % 50
             }
             return@MlKitAnalyzer
         }
@@ -102,12 +101,11 @@ class BoundingBoxOverlay(context : Context) : View(context) {
         }
     }
 
-    fun updateBoundingBoxes(boxes: List<Path>, arEnabled: Boolean) {
+    fun updateBoundingBoxes(boxes: List<Path>, arEnabled: Boolean, previewWidth: Float, previewHeight: Float) {
+        val bufferFactor = 1.2f
+
         if (arEnabled) {
             boundingBoxes = boxes
-
-            val previewWidth = width.toFloat()
-            val previewHeight = height.toFloat()
 
             val bounds = RectF()
             boxes.forEach { path ->
@@ -116,11 +114,20 @@ class BoundingBoxOverlay(context : Context) : View(context) {
             val originalWidth = bounds.width()
             val originalHeight = bounds.height()
 
-            scaleX = previewWidth / originalWidth
-            scaleY = previewHeight / originalHeight
+            if(originalWidth != 0f && originalHeight != 0f) {
+                val bufferWidth = originalWidth * bufferFactor
+                scaleX = previewWidth / bufferWidth
+                scaleY = previewHeight / originalHeight
+            }
+            else{
+                scaleX = 1.0f
+                scaleY = 1.0f
+            }
         }
         else {
             boundingBoxes = emptyList()
+            scaleX = 1.0f
+            scaleY = 1.0f
         }
         invalidate() // Redraw the view with updated bounding boxes
     }
@@ -130,7 +137,6 @@ class BoundingBoxOverlay(context : Context) : View(context) {
 fun CameraPreview(
     cameraProvider: LifecycleCameraController,
     onTextRecognition: (String, List<Path>) -> Unit,
-    target: Int,
     arEnabled: Boolean
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -152,13 +158,12 @@ fun CameraPreview(
                     implementationMode = PreviewView.ImplementationMode.COMPATIBLE
                     controller = bindPreview(
                         { text, boxes ->
-                            boundingBoxOverlay.updateBoundingBoxes(boxes, arEnabled)
+                            boundingBoxOverlay.updateBoundingBoxes(boxes, arEnabled, width.toFloat(), height.toFloat())
                             onTextRecognition(text, boxes)
                         },
                         cameraProvider,
                         arEnabled,
                         lifecycleOwner,
-                        target,
                         context
                     )
                 }

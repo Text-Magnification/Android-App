@@ -13,6 +13,5 @@ data class MagUiState(
     val themeOptions: List<String> = listOf("System", "Light", "Dark"),
     val arEnabled: Boolean = false,
     val recognizedText: String = "",
-    val stabilizationTarget: Int = 50,
     val isTextFrozen: Boolean = false
 )

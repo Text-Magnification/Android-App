@@ -29,7 +29,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RichTooltipBox
 import androidx.compose.material3.RichTooltipState
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -61,8 +60,6 @@ fun SettingsScreen(
     onArToggle: (Boolean) -> Unit,
     dynamicThemeEnabled: Boolean,
     onDynamicThemeToggle: (Boolean) -> Unit,
-    target: Float,
-    onTargetChange: (Float) -> Unit,
     onAboutUsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -84,8 +81,6 @@ fun SettingsScreen(
             onArToggle,
             dynamicThemeEnabled,
             onDynamicThemeToggle,
-            target,
-            onTargetChange,
             onAboutUsClick,
             modifier = Modifier.padding(innerPadding))
     }
@@ -106,8 +101,6 @@ fun SettingsScreenBody(
     onArToggle: (Boolean) -> Unit,
     dynamicThemeEnabled: Boolean,
     onDynamicThemeToggle: (Boolean) -> Unit,
-    target: Float,
-    onTargetChange: (Float) -> Unit,
     onAboutUsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -225,29 +218,6 @@ fun SettingsScreenBody(
                         Switch(
                             checked = arEnabled,
                             onCheckedChange = onArToggle,
-                        )
-                    },
-                    modifier = Modifier.padding(start = settingsItemPadding)
-                )
-            }
-
-            item {
-                ListItem(
-                    headlineContent = {
-                        Row(
-                            horizontalArrangement = Arrangement.Start,
-                            verticalAlignment = Alignment.CenterVertically
-                        ){
-                            SettingsText(content = "Text Recognition Stabilization")
-                            SettingsInfo(title = "About Text Recognition Stabilization", content = "Allows you to stabilize text recognition (and AR Overlays) to reduce choppiness. Higher stabilization will lead to more stable results but slower updates to text recognition.")
-                        }
-                    },
-                    supportingContent = {
-                        Slider(
-                            value = target,
-                            onValueChange = onTargetChange,
-                            valueRange = 0f..100f,
-                            steps = 3
                         )
                     },
                     modifier = Modifier.padding(start = settingsItemPadding)

@@ -43,7 +43,6 @@ fun MainScreen(
     isTextFrozen: Boolean,
     fontSize: String = "14",
     recognizedText: String = "",
-    stabilizationTarget: Int,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -58,7 +57,6 @@ fun MainScreen(
             isTextFrozen = isTextFrozen,
             fontSize = fontSize,
             recognizedText = recognizedText,
-            stabilizationTarget = stabilizationTarget,
             modifier = Modifier.padding(innerPadding)
         )
     }
@@ -73,7 +71,6 @@ fun MainScreenBody(
     isTextFrozen: Boolean,
     fontSize: String,
     recognizedText: String = "",
-    stabilizationTarget: Int,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -92,7 +89,6 @@ fun MainScreenBody(
             CameraPreview(
                 cameraProvider = cameraProvider,
                 onTextRecognition = onTextRecognition,
-                target = stabilizationTarget,
                 arEnabled = arEnabled
             )
         }
