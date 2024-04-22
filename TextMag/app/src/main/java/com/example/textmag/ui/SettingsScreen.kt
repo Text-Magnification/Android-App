@@ -1,5 +1,8 @@
 package com.example.textmag.ui
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -41,6 +44,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 
@@ -102,7 +106,8 @@ fun SettingsScreenBody(
     dynamicThemeEnabled: Boolean,
     onDynamicThemeToggle: (Boolean) -> Unit,
     onAboutUsClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    context: Context = LocalContext.current
 ) {
     val settingsItemPadding = 8.dp
     Surface(
@@ -249,7 +254,7 @@ fun SettingsScreenBody(
                         )
                     },
                     selected = true,
-                    onClick = { /*TODO*/ },
+                    onClick = { openYouTubeLink(context, "https://www.youtube.com/watch?v=2n0_rV2fdmE")},
                     colors = NavigationDrawerItemDefaults.colors(
                         selectedContainerColor = MaterialTheme.colorScheme.secondaryContainer
                     )
@@ -257,6 +262,11 @@ fun SettingsScreenBody(
             }
         }
     }
+}
+
+fun openYouTubeLink(context: Context, link: String) {
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+    context.startActivity(intent)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

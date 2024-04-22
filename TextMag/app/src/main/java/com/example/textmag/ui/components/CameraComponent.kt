@@ -9,6 +9,7 @@ import android.graphics.Path
 import android.graphics.Matrix
 import android.graphics.RectF
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -154,7 +155,7 @@ fun CameraPreview(
                     layoutParams = LinearLayout.LayoutParams(0, MATCH_PARENT).apply {
                         weight = 1f // Take remaining vertical space
                     }
-                    scaleType = PreviewView.ScaleType.FILL_START
+                    scaleType = PreviewView.ScaleType.FIT_CENTER
                     implementationMode = PreviewView.ImplementationMode.COMPATIBLE
                     controller = bindPreview(
                         { text, boxes ->
