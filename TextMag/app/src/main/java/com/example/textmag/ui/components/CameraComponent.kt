@@ -4,12 +4,11 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color.argb
 import android.graphics.Color.rgb
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.Matrix
 import android.graphics.RectF
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -35,6 +34,7 @@ fun bindPreview(
     cameraProvider: LifecycleCameraController,
     arEnabled: Boolean,
     lifecycleOwner: LifecycleOwner,
+    target: Int,
     context: Context
 ): LifecycleCameraController {
     val textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
@@ -70,7 +70,7 @@ fun bindPreview(
                 ++buffer
             }
             else {
-                buffer = (buffer + 1) % 50
+                buffer = (buffer + 1) % target
             }
             return@MlKitAnalyzer
         }
@@ -138,6 +138,7 @@ class BoundingBoxOverlay(context : Context) : View(context) {
 fun CameraPreview(
     cameraProvider: LifecycleCameraController,
     onTextRecognition: (String, List<Path>) -> Unit,
+    target: Int,
     arEnabled: Boolean
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -163,6 +164,7 @@ fun CameraPreview(
                         cameraProvider,
                         arEnabled,
                         lifecycleOwner,
+                        target,
                         context
                     )
                 }
