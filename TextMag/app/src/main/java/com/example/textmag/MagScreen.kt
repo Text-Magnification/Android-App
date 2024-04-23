@@ -59,6 +59,7 @@ fun TextMagApp(
                     isTextFrozen = uiState.isTextFrozen,
                     stabilizationTarget = uiState.stabilizationTarget,
                     recognizedText = uiState.recognizedText,
+                    script = uiState.script,
                     fontSize = uiState.fontSize.toString().slice(0..1)
                 )
             }
@@ -71,7 +72,10 @@ fun TextMagApp(
                     onFontDropdownSelection = { newFont -> viewModel.setFont(newFont) },
                     curFontSize = uiState.fontSize.toString().slice(0..1),
                     fontSizeOptions = uiState.fontSizeOptions,
-                    onFontSizeDropdownSelection = { newFontSize -> viewModel.setFontSize(newFontSize)},
+                    onFontSizeDropdownSelection = { newFontSize -> viewModel.setFontSize(newFontSize) },
+                    curScript = uiState.script,
+                    scriptOptions = uiState.scriptOptions,
+                    onScriptSelection = { newScript -> viewModel.updateScript(newScript) },
                     curTheme = uiState.theme,
                     themeOptions = uiState.themeOptions,
                     onThemeDropdownSelection = { newTheme -> viewModel.updateTheme(newTheme) },

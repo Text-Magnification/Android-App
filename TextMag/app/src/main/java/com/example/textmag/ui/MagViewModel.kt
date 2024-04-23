@@ -72,5 +72,11 @@ class MagViewModel: ViewModel() {
         }
     }
 
+    fun updateScript(newScript: String) {
+        _uiState.update { currentState ->
+            currentState.copy(script = newScript)
+        }
+    }
+
     // TODO: Add a reset to default options in settings
 }

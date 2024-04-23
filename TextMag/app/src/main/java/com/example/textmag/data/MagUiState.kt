@@ -14,5 +14,7 @@ data class MagUiState(
     val arEnabled: Boolean = false,
     val recognizedText: String = "",
     val stabilizationTarget: Int = 50,
+    val script: String = "Latin",
+    val scriptOptions: List<String> = listOf("Latin", "Devanagari", "Korean", "Chinese", "Japanese"),
     val isTextFrozen: Boolean = false
 )

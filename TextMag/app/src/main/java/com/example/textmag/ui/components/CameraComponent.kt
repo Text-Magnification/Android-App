@@ -24,6 +24,11 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.TextRecognizer
+import com.google.mlkit.vision.text.chinese.ChineseTextRecognizerOptions
+import com.google.mlkit.vision.text.devanagari.DevanagariTextRecognizerOptions
+import com.google.mlkit.vision.text.japanese.JapaneseTextRecognizerOptions
+import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 
 var buffer = 0
@@ -35,9 +40,17 @@ fun bindPreview(
     arEnabled: Boolean,
     lifecycleOwner: LifecycleOwner,
     target: Int,
+    script: String,
     context: Context
 ): LifecycleCameraController {
-    val textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+    val textRecognizer: TextRecognizer
+    when(script) {
+        "Devanagari" -> textRecognizer = TextRecognition.getClient(DevanagariTextRecognizerOptions.Builder().build())
+        "Chinese" -> textRecognizer = TextRecognition.getClient(ChineseTextRecognizerOptions.Builder().build())
+        "Korean" -> textRecognizer = TextRecognition.getClient(KoreanTextRecognizerOptions.Builder().build())
+        "Japanese" -> textRecognizer = TextRecognition.getClient(JapaneseTextRecognizerOptions.Builder().build())
+        else -> textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+    }
 
     cameraProvider.setImageAnalysisAnalyzer(
         ContextCompat.getMainExecutor(context),
@@ -139,6 +152,7 @@ fun CameraPreview(
     cameraProvider: LifecycleCameraController,
     onTextRecognition: (String, List<Path>) -> Unit,
     target: Int,
+    script: String,
     arEnabled: Boolean
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -165,6 +179,7 @@ fun CameraPreview(
                         arEnabled,
                         lifecycleOwner,
                         target,
+                        script,
                         context
                     )
                 }

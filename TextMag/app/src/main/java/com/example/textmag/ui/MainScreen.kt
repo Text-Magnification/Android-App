@@ -43,6 +43,7 @@ fun MainScreen(
     isTextFrozen: Boolean,
     fontSize: String = "14",
     recognizedText: String = "",
+    script: String,
     stabilizationTarget: Int,
     modifier: Modifier = Modifier
 ) {
@@ -58,6 +59,7 @@ fun MainScreen(
             isTextFrozen = isTextFrozen,
             fontSize = fontSize,
             recognizedText = recognizedText,
+            script = script,
             stabilizationTarget = stabilizationTarget,
             modifier = Modifier.padding(innerPadding)
         )
@@ -73,6 +75,7 @@ fun MainScreenBody(
     isTextFrozen: Boolean,
     fontSize: String,
     recognizedText: String = "",
+    script: String,
     stabilizationTarget: Int,
     modifier: Modifier = Modifier
 ) {
@@ -93,7 +96,8 @@ fun MainScreenBody(
                 cameraProvider = cameraProvider,
                 onTextRecognition = onTextRecognition,
                 target = stabilizationTarget,
-                arEnabled = arEnabled
+                script = script,
+                arEnabled = arEnabled && !isTextFrozen
             )
         }
 

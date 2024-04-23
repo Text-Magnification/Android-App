@@ -58,6 +58,9 @@ fun SettingsScreen(
     curFontSize: String,
     fontSizeOptions: List<String>,
     onFontSizeDropdownSelection: (String) -> Unit,
+    curScript: String,
+    scriptOptions: List<String>,
+    onScriptSelection: (String) -> Unit,
     curTheme: String,
     themeOptions: List<String>,
     onThemeDropdownSelection: (String) -> Unit,
@@ -81,6 +84,9 @@ fun SettingsScreen(
             curFontSize,
             fontSizeOptions,
             onFontSizeDropdownSelection,
+            curScript,
+            scriptOptions,
+            onScriptSelection,
             curTheme,
             themeOptions,
             onThemeDropdownSelection,
@@ -103,6 +109,9 @@ fun SettingsScreenBody(
     curFontSize: String,
     fontSizeOptions: List<String>,
     onFontSizeDropdownSelection: (String) -> Unit,
+    curScript: String,
+    scriptOptions: List<String>,
+    onScriptSelection: (String) -> Unit,
     curTheme: String,
     themeOptions: List<String>,
     onThemeDropdownSelection: (String) -> Unit,
@@ -157,6 +166,32 @@ fun SettingsScreenBody(
                             options = fontSizeOptions,
                             selection = curFontSize,
                             updateSelection = onFontSizeDropdownSelection,
+                            modifier = Modifier
+                                .fillMaxWidth(0.4f)
+                        )
+                    },
+                    modifier = Modifier.padding(start = settingsItemPadding)
+                )
+            }
+
+            item {
+                ListItem(
+                    headlineContent = {
+                        Row (
+                            verticalAlignment = Alignment.CenterVertically
+                        ){
+                            SettingsText(content = "Text Script")
+                            SettingsInfo(
+                                title = "About Text Recognition Script",
+                                content = "Selects the script of the text you'd like to magnify"
+                            )
+                        }
+                    },
+                    trailingContent = {
+                        SettingsDropdown(
+                            options = scriptOptions,
+                            selection = curScript,
+                            updateSelection = onScriptSelection,
                             modifier = Modifier
                                 .fillMaxWidth(0.4f)
                         )
@@ -225,7 +260,7 @@ fun SettingsScreenBody(
                             SettingsText(content = "AR Overlays (Experimental)")
                             SettingsInfo(
                                 title = "About Overlays",
-                                content = "Displays rectangular overlays in the live camera feed around text passages (Note that this is an experimental feature)"
+                                content = "Displays rectangular overlays in the live camera feed around text passages when enabled and text is not frozen (Note that this is an experimental feature)"
                             )
                         }
                     },
