@@ -116,7 +116,7 @@ class BoundingBoxOverlay(context : Context) : View(context) {
     }
 
     fun updateBoundingBoxes(boxes: List<Path>, arEnabled: Boolean, previewWidth: Float, previewHeight: Float) {
-        val bufferFactor = 1.2f
+        val bufferFactor = 1.5f
 
         if (arEnabled) {
             boundingBoxes = boxes
@@ -168,7 +168,7 @@ fun CameraPreview(
                 val previewView = PreviewView(context).apply {
                     setBackgroundColor(rgb(234, 224, 231))
                     layoutParams = LinearLayout.LayoutParams(0, MATCH_PARENT, 1f)
-                    scaleType = PreviewView.ScaleType.FILL_CENTER
+                    scaleType = PreviewView.ScaleType.FILL_START
                     implementationMode = PreviewView.ImplementationMode.COMPATIBLE
                     controller = bindPreview(
                         { text, boxes ->
